@@ -9,13 +9,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.cert.Certificate;
+import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
@@ -24,7 +25,7 @@ public class frame implements ActionListener{
 
 	private JFrame frame;
 	private JTextPane textPane;
-	private JTextPane textPane_1 ;
+	private JTextArea textArea;
 	/**
 	 * Launch the application.
 	 */
@@ -58,12 +59,12 @@ public class frame implements ActionListener{
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 1207, 854);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
 		JButton Recuperer = new JButton("Recuperer");
-		Recuperer.setBounds(204, 43, 117, 25);
+		Recuperer.setBounds(201, 43, 117, 25);
 		frame.getContentPane().add(Recuperer);
 		Recuperer.addActionListener(this);
 
@@ -75,10 +76,11 @@ public class frame implements ActionListener{
 		JLabel lblAdresseDonneeBrut = new JLabel("Adresse donnee brut");
 		lblAdresseDonneeBrut.setBounds(12, 24, 256, 25);
 		frame.getContentPane().add(lblAdresseDonneeBrut);
-
-		textPane_1 = new JTextPane();
-		textPane_1.setBounds(31, 107, 407, 139);
-		frame.getContentPane().add(textPane_1);
+		textArea = new JTextArea(5, 20);
+		textArea.setLocation(65, 108);
+		textArea.setSize(1130, 707);
+		
+		frame.getContentPane().add(textArea);
 		frame.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{Recuperer, textPane}));
 	}
 
@@ -98,6 +100,8 @@ public class frame implements ActionListener{
 	private void testIt(){
 
 		String https_url = "https://opensky-network.org/api/states/all";
+		//	String https_url = "https://www.google.com/";
+
 		URL url;
 		try {
 
@@ -105,7 +109,7 @@ public class frame implements ActionListener{
 			HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
 
 			//dumpl all cert info
-			print_https_cert(con);
+			//			print_https_cert(con);
 
 			//dump all the content
 			print_content(con);
@@ -118,7 +122,7 @@ public class frame implements ActionListener{
 
 	}
 
-	private void print_https_cert(HttpsURLConnection con){
+	/*	private void print_https_cert(HttpsURLConnection con){
 
 		if(con!=null){
 
@@ -147,22 +151,58 @@ public class frame implements ActionListener{
 
 		}
 
-	}
+	}*/
 
+/*delimiteurs
+ * abc…    Letters
+123…    Digits
+\d      Any Digit
+\D      Any Non-digit character
+.       Any Character
+\.      Period
+[abc]   Only a, b, or c
+[^abc]  Not a, b, nor c
+[a-z]   Characters a to z
+[0-9]   Numbers 0 to 9
+\w      Any Alphanumeric character
+\W      Any Non-alphanumeric character
+{m}     m Repetitions
+{m,n}   m to n Repetitions
+*       Zero or more repetitions
++       One or more repetitions
+?       Optional character
+\s      Any Whitespace
+\S      Any Non-whitespace character
+^…$     Starts and ends
+(…)     Capture Group
+(a(bc)) Capture Sub-group
+(.*)    Capture all
+(ab|cd) Matches ab or cd	
+ */
+	
+	
 	private void print_content(HttpsURLConnection con){
 		if(con!=null){
 
 			try {
 
-				System.out.println("****** Content of the URL ********");
-				BufferedReader br =
-						new BufferedReader(
-								new InputStreamReader(con.getInputStream()));
-
+				System.out.println("****** Content of the URL ********\n");
+				BufferedReader br =	new BufferedReader(	new InputStreamReader(con.getInputStream()));
 				String input;
-
+				Scanner scan1;
+				int cpt=0;
+				//Pattern delimiter= new 
 				while ((input = br.readLine()) != null){
-					System.out.println(input);
+					scan1=new Scanner(input);
+					
+					scan1.useDelimiter("],");
+					while(scan1.hasNext())	{
+				//	System.out.println(cpt+"--"+scan1.next() );
+				//	this.textPane_1.setText(cpt+"--"+scan1.next()+"\n");
+					this.textArea.append(cpt+"--"+scan1.next()+"\n");
+					cpt++;
+					
+					}
 				}
 				br.close();
 
@@ -173,6 +213,5 @@ public class frame implements ActionListener{
 		}
 
 	}
-
 }	
 
