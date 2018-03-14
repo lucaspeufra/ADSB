@@ -9,13 +9,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 
@@ -26,6 +26,8 @@ public class frame implements ActionListener{
 	private JFrame frame;
 	private JTextPane textPane;
 	private JTextArea textArea;
+	private ArrayList<Data> ListeData = new ArrayList<Data>();
+	private static int cpt=0;
 	/**
 	 * Launch the application.
 	 */
@@ -52,6 +54,7 @@ public class frame implements ActionListener{
 	 */
 	public frame() {
 		initialize();
+		//	ListeData=new ArrayList<Data>();
 	}
 
 	/**
@@ -79,7 +82,7 @@ public class frame implements ActionListener{
 		textArea = new JTextArea(5, 20);
 		textArea.setLocation(65, 108);
 		textArea.setSize(1130, 707);
-		
+
 		frame.getContentPane().add(textArea);
 		frame.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{Recuperer, textPane}));
 	}
@@ -153,8 +156,8 @@ public class frame implements ActionListener{
 
 	}*/
 
-/*delimiteurs
- * abc…    Letters
+	/*delimiteurs
+	 * abc…    Letters
 123…    Digits
 \d      Any Digit
 \D      Any Non-digit character
@@ -168,7 +171,7 @@ public class frame implements ActionListener{
 \W      Any Non-alphanumeric character
 {m}     m Repetitions
 {m,n}   m to n Repetitions
-*       Zero or more repetitions
+	 *       Zero or more repetitions
 +       One or more repetitions
 ?       Optional character
 \s      Any Whitespace
@@ -178,9 +181,9 @@ public class frame implements ActionListener{
 (a(bc)) Capture Sub-group
 (.*)    Capture all
 (ab|cd) Matches ab or cd	
- */
-	
-	
+	 */
+
+
 	private void print_content(HttpsURLConnection con){
 		if(con!=null){
 
@@ -190,19 +193,59 @@ public class frame implements ActionListener{
 				BufferedReader br =	new BufferedReader(	new InputStreamReader(con.getInputStream()));
 				String input;
 				Scanner scan1;
-				int cpt=0;
+
 				//Pattern delimiter= new 
+
 				while ((input = br.readLine()) != null){
+					/*	scan2=new Scanner(input);
+					scan2.useDelimiter(":");
+					scan2.next();
+					scan2.next();
+					scan2.reset();
+					input =scan2.next();*/
 					scan1=new Scanner(input);
-					
 					scan1.useDelimiter("],");
+					System.out.println(scan1.next());
 					while(scan1.hasNext())	{
-				//	System.out.println(cpt+"--"+scan1.next() );
-				//	this.textPane_1.setText(cpt+"--"+scan1.next()+"\n");
-					this.textArea.append(cpt+"--"+scan1.next()+"\n");
-					cpt++;
-					
+						//	System.out.println(cpt+"--"+scan1.next() );
+						//	this.textPane_1.setText(cpt+"--"+scan1.next()+"\n");
+
+						String ligne =scan1.next();
+						//	this.textArea.append(cpt+"--"+ligne+"\n");
+						String [] data=ligne.split(",");
+						//	this.textArea.append(cpt+"-x-");
+						/*		for (String str : data)
+					{
+						this.textArea.append(str+"-x-");
 					}
+					this.textArea.append("\n");*/
+
+						//pour tst
+						Data adsb=new Data(data[0],0);
+						if (!data[3].equals("null"))
+						{
+							adsb.setTime_position(Integer.parseInt(data[3]));
+						}
+						cpt++;
+						int i=0;
+						int aut=1;
+						for (i=0;i<ListeData.size();i++)
+							{if (ListeData.get(i).compareTo(adsb)==0)
+							{
+							i=ListeData.size();
+							aut=0;
+							}
+							}
+						if (aut==1)
+							{
+							ListeData.add(adsb);
+							}
+						//	this.textArea.append(adsb +"\n");
+
+
+					}
+					System.out.println(cpt );
+					System.out.println(ListeData.size() );
 				}
 				br.close();
 
