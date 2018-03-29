@@ -1,6 +1,9 @@
 package adsb;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -30,6 +33,7 @@ public class RecupHTTP extends TimerTask  {
 	private int frequence=30;
 	private String https_url;
 	private int init=0;
+	private String nomfic="suivi.txt";
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -74,7 +78,7 @@ public class RecupHTTP extends TimerTask  {
 		super();
 		ListeData = listeData1;
 		this.https_url = https_url1;
-	}
+		}
 
 	public ArrayList<Data> getListeData() {
 		return ListeData;
@@ -103,7 +107,6 @@ public class RecupHTTP extends TimerTask  {
 	private void print_content(HttpsURLConnection con){
 		if(con!=null){
 			try { 			 
-				ArrayList<Integer> supprimer = new ArrayList<Integer>();
 				BufferedReader br =	new BufferedReader(	new InputStreamReader(con.getInputStream()));
 				String input;
 				Scanner scan1;
@@ -170,7 +173,7 @@ public class RecupHTTP extends TimerTask  {
 						if (init==0) {
 							ListeData.add(adsb);
 							compteurvalide++;
-
+							
 						}
 						
 						
@@ -222,15 +225,13 @@ public class RecupHTTP extends TimerTask  {
 //					}
 
 					frequence++;
-					if (frequence>=1)
+					if (frequence>=30)
 					{
 						System.out.println("time:" + new Date());
-						this.textArea.append( "time:" + new Date()+"\n");
 						System.out.println("total="+cpt );
-						this.textArea.append("total="+cpt+"\n");
 						System.out.println("retenu="+compteurvalide );
-						this.textArea.append("retenu="+compteurvalide+"\n");
 						frequence=0;
+						this.ecrireFichier(nomfic, ""+new Date()+";"+cpt+";"+compteurvalide,false);
 					}
 				}
 				br.close();
@@ -241,6 +242,70 @@ public class RecupHTTP extends TimerTask  {
 		}
 
 	}
+	
+	
+	public  void lireFichier(String nom)
+	{
+		System.out.println("lire dans le fichier");
+		BufferedReader fe = null;
+		try{
+			
+			fe = new BufferedReader(new FileReader(nom));
+			
+			String tampon = fe.readLine();
+			while(tampon != null){
+				System.out.println(tampon);
+				tampon = fe.readLine();
+			}
+			
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				if(fe != null)
+				{
+					fe.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public  void ecrireFichier(String nom,String donnee,boolean init){
+		System.out.println("ecriture dans un fichier");
+		BufferedWriter fs = null;
+		try{
+			
+			fs = new BufferedWriter(new FileWriter(nom,!init)); // true pour ajouter 
+			fs.write(donnee, 0, donnee.length());
+		//	fs.append(donnee);
+			fs.newLine();
+			return;
+			
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				if(fs != null)
+				{
+					fs.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	
+	
 
 
 }

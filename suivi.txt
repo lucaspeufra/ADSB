@@ -1,0 +1,2 @@
+time;total;exploitable
+Thu Mar 29 11:49:11 CEST 2018;4215.0;4215.0

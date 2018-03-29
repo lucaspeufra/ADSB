@@ -93,8 +93,10 @@ public class frame implements ActionListener{
 		// TODO Auto-generated method stub
 		//URL url=null;
 		//this.testIt();
-	;
-		 TimerTask timerTask = new RecupHTTP(textArea,ListeData, "https://opensky-network.org/api/states/all");
+		RecupHTTP osky=new RecupHTTP(textArea,ListeData, "https://opensky-network.org/api/states/all");
+		 TimerTask timerTask = osky;//new RecupHTTP(textArea,ListeData, "https://opensky-network.org/api/states/all");
+		 osky.ecrireFichier("suivi.txt", "time;total;exploitable",true);/// initialisation du fichier de suivi stat
+			
 		 	        // running timer task as daemon thread
 		 	        Timer timer = new Timer(true);
 		 	        timer.schedule(timerTask, 0, 10 * 1000);
