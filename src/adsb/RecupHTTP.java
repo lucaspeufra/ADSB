@@ -147,14 +147,14 @@ public class RecupHTTP extends TimerTask  {
 					this.textArea.append("\n");*/
 
 						//pour tst
-						DataStat adsb=new DataStat(data[0],0,Boolean.getBoolean(data[8]),true);
+						DataStat adsb=new DataStat(data[0],0,Boolean.getBoolean(data[8]),false);
 						
 						
-						DataFull adsbstore=new DataFull(data[0],data[1],data[2],Integer.parseInt(data[3]),
+						/*DataFull adsbstore=new DataFull(data[0],data[1],data[2],Integer.parseInt(data[3]),
 								Integer.parseInt(data[4]),Float.parseFloat(data[5]),Float.parseFloat(data[6]),
 								Float.parseFloat(data[7]),Boolean.getBoolean(data[8]),Float.parseFloat(data[9]),
 								Float.parseFloat(data[10]),Float.parseFloat(data[11]),Float.parseFloat(data[13]),
-								data[14],Boolean.getBoolean(data[15]),Integer.parseInt(data[16]));
+								data[14],Boolean.getBoolean(data[15]),Integer.parseInt(data[16]));*/
 						
 						if (!data[3].equals("null"))
 						{
@@ -180,9 +180,13 @@ public class RecupHTTP extends TimerTask  {
 						int j=0;
 						int n=ListeData.size();
 						if (init==0) {
+							if (adsb.isAuSol()==false) {
+								adsb.setaAjouter(false);
+								compteurvol++;
+								}
+							else adsb.setaAjouter(true);
 							ListeData.add(adsb);
 							compteurvalide++;
-							compteurvol++;
 						}
 						
 						
@@ -201,13 +205,14 @@ public class RecupHTTP extends TimerTask  {
 									if (ListeData.get(j).getTime_position()!=adsb.getTime_position()) {
 										
 										
-										if (adsb.isaAjouter()==true && adsb.isAuSol()==false) {
+										if (ListeData.get(j).isaAjouter()==true && adsb.isAuSol() ==false) {
 											adsb.setaAjouter(false);
 											compteurvol++;
+											System.out.println(adsb.getIcao24());
 										}
 										
 										else {
-											if (adsb.isaAjouter()==false && adsb.isAuSol()==true) {
+											if (ListeData.get(j).isaAjouter()==false && adsb.isAuSol()==true) {
 												adsb.setaAjouter(true);
 											}
 										}
@@ -226,13 +231,13 @@ public class RecupHTTP extends TimerTask  {
 								}
 								else {
 									
-									if (adsb.isAuSol()==false) {
-										adsb.setaAjouter(false);
-										compteurvol++;
-										}
-									
 									if (j==n-1) {
 
+										if (adsb.isAuSol()==false) {
+											adsb.setaAjouter(false);
+											compteurvol++;
+											}
+										else adsb.setaAjouter(true);
 										compteurvalide++;
 										ListeData.add(adsb);
 									}
@@ -256,7 +261,7 @@ public class RecupHTTP extends TimerTask  {
 //					}
 
 					frequence++;
-					if (frequence>=30)
+					if (frequence>=1)
 					{
 						System.out.println("time:" + new Date());
 						System.out.println("total="+cpt );

@@ -20,7 +20,7 @@ public class frame implements ActionListener{
 
 	private JFrame frame;
 	private JTextPane textPane;
-	private JTextArea textArea;
+	//private JTextArea textArea;
 	private ArrayList<DataStat> ListeData = new ArrayList<DataStat>();
 
 	/**
@@ -57,7 +57,7 @@ public class frame implements ActionListener{
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1207, 854);
+		frame.setBounds(100, 100, 500, 100);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -74,11 +74,11 @@ public class frame implements ActionListener{
 		JLabel lblAdresseDonneeBrut = new JLabel("Adresse donnee brut");
 		lblAdresseDonneeBrut.setBounds(12, 24, 256, 25);
 		frame.getContentPane().add(lblAdresseDonneeBrut);
-		textArea = new JTextArea(5, 20);
-		textArea.setLocation(65, 108);
-		textArea.setSize(1130, 707);
+		//textArea = new JTextArea(5, 20);
+		//textArea.setLocation(65, 108);
+		//textArea.setSize(1130, 707);
 
-		frame.getContentPane().add(textArea);
+		//frame.getContentPane().add(textArea);
 		frame.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{Recuperer, textPane}));
 	}
 
@@ -92,9 +92,10 @@ public class frame implements ActionListener{
 		// TODO Auto-generated method stub
 		//URL url=null;
 		//this.testIt();
-		RecupHTTP osky=new RecupHTTP(textArea,ListeData, "https://opensky-network.org/api/states/all");
+		//"textArea," enelvé en premier argument
+		RecupHTTP osky=new RecupHTTP(ListeData, "https://opensky-network.org/api/states/all");
 		 TimerTask timerTask = osky;//new RecupHTTP(textArea,ListeData, "https://opensky-network.org/api/states/all");
-		 osky.ecrireFichier("suivi.txt", "time;total;exploitable",true);/// initialisation du fichier de suivi stat
+		 osky.ecrireFichier("suivi.txt", "time;total;exploitable;vols",true);/// initialisation du fichier de suivi stat
 			
 		 	        // running timer task as daemon thread
 		 	        Timer timer = new Timer(true);
