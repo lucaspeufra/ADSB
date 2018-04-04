@@ -5,7 +5,6 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,7 +21,7 @@ public class frame implements ActionListener{
 	private JFrame frame;
 	private JTextPane textPane;
 	private JTextArea textArea;
-	private ArrayList<Data> ListeData = new ArrayList<Data>();
+	private ArrayList<DataStat> ListeData = new ArrayList<DataStat>();
 
 	/**
 	 * Launch the application.

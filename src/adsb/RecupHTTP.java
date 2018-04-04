@@ -19,7 +19,7 @@ import javax.swing.JTextArea;
 public class RecupHTTP extends TimerTask  {
 
 	private JTextArea textArea;
-	public RecupHTTP(JTextArea textArea, ArrayList<Data> listeData, String https_url) {
+	public RecupHTTP(JTextArea textArea, ArrayList<DataStat> listeData, String https_url) {
 		super();
 		this.textArea = textArea;
 		ListeData = listeData;
@@ -27,9 +27,10 @@ public class RecupHTTP extends TimerTask  {
 		this.textArea.append("Time;donnee totale;donnee non redondante");
 	}
 
-	private ArrayList<Data> ListeData = new ArrayList<Data>();
+	private ArrayList<DataStat> ListeData = new ArrayList<DataStat>();
 	private static double cpt=0;
 	private static double compteurvalide=0;
+	private static double compteurvol=0;
 	private int frequence=30;
 	private String https_url;
 	private int init=0;
@@ -74,17 +75,17 @@ public class RecupHTTP extends TimerTask  {
 
 
 
-	public RecupHTTP(ArrayList<Data> listeData1, String https_url1) {
+	public RecupHTTP(ArrayList<DataStat> listeData1, String https_url1) {
 		super();
 		ListeData = listeData1;
 		this.https_url = https_url1;
 		}
 
-	public ArrayList<Data> getListeData() {
+	public ArrayList<DataStat> getListeData() {
 		return ListeData;
 	}
 
-	public void setListeData(ArrayList<Data> listeData) {
+	public void setListeData(ArrayList<DataStat> listeData) {
 		ListeData = listeData;
 	}
 
@@ -146,7 +147,15 @@ public class RecupHTTP extends TimerTask  {
 					this.textArea.append("\n");*/
 
 						//pour tst
-						Data adsb=new Data(data[0],0);
+						DataStat adsb=new DataStat(data[0],0,Boolean.getBoolean(data[8]),true);
+						
+						
+						DataFull adsbstore=new DataFull(data[0],data[1],data[2],Integer.parseInt(data[3]),
+								Integer.parseInt(data[4]),Float.parseFloat(data[5]),Float.parseFloat(data[6]),
+								Float.parseFloat(data[7]),Boolean.getBoolean(data[8]),Float.parseFloat(data[9]),
+								Float.parseFloat(data[10]),Float.parseFloat(data[11]),Float.parseFloat(data[13]),
+								data[14],Boolean.getBoolean(data[15]),Integer.parseInt(data[16]));
+						
 						if (!data[3].equals("null"))
 						{
 							adsb.setTime_position(Integer.parseInt(data[3]));
@@ -173,7 +182,7 @@ public class RecupHTTP extends TimerTask  {
 						if (init==0) {
 							ListeData.add(adsb);
 							compteurvalide++;
-							
+							compteurvol++;
 						}
 						
 						
@@ -190,16 +199,38 @@ public class RecupHTTP extends TimerTask  {
 								{
 
 									if (ListeData.get(j).getTime_position()!=adsb.getTime_position()) {
+										
+										
+										if (adsb.isaAjouter()==true && adsb.isAuSol()==false) {
+											adsb.setaAjouter(false);
+											compteurvol++;
+										}
+										
+										else {
+											if (adsb.isaAjouter()==false && adsb.isAuSol()==true) {
+												adsb.setaAjouter(true);
+											}
+										}
+										
+										
 										compteurvalide++;
 										ListeData.add(adsb);
 										ListeData.remove(j);
 									}
+									
+									
 
 //									supprimer.add(j);
 									j=n-1;
 
 								}
 								else {
+									
+									if (adsb.isAuSol()==false) {
+										adsb.setaAjouter(false);
+										compteurvol++;
+										}
+									
 									if (j==n-1) {
 
 										compteurvalide++;
@@ -230,8 +261,9 @@ public class RecupHTTP extends TimerTask  {
 						System.out.println("time:" + new Date());
 						System.out.println("total="+cpt );
 						System.out.println("retenu="+compteurvalide );
+						System.out.println("vols="+compteurvol);
 						frequence=0;
-						this.ecrireFichier(nomfic, ""+new Date()+";"+cpt+";"+compteurvalide,false);
+						this.ecrireFichier(nomfic, ""+new Date()+";"+cpt+";"+compteurvalide+";"+compteurvol,false);
 					}
 				}
 				br.close();

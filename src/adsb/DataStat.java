@@ -1,40 +1,92 @@
 package adsb;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
-public class Data implements Comparable<Data> {
+public class DataStat implements Comparable<DataStat> {
 	private String icao24;
 	private int time_position;
+	private boolean auSol;
+	private boolean aAjouter;
+
+	
+	
+	
+	public DataStat(String icao24, int time_position, boolean auSol, boolean aAjouter) {
+		super();
+		this.icao24 = icao24;
+		this.time_position = time_position;
+		this.auSol = auSol;
+		this.aAjouter = aAjouter;
+	}
+
+
+
+
+	@Override
+	public String toString() {
+		return "DataStat [icao24=" + icao24 + ", time_position=" + time_position + ", auSol=" + auSol + ", aAjouter="
+				+ aAjouter + "]";
+	}
+
+
+
 
 	public String getIcao24() {
 		return icao24;
 	}
+
+
+
+
 	public void setIcao24(String icao24) {
 		this.icao24 = icao24;
 	}
+
+
+
+
 	public int getTime_position() {
 		return time_position;
 	}
+
+
+
+
 	public void setTime_position(int time_position) {
 		this.time_position = time_position;
 	}
 
 
-	public Data(String icao241, int time_position1) {
-		super();
-		this.icao24 = icao241;
-		this.time_position = time_position1;
+
+
+	public boolean isAuSol() {
+		return auSol;
 	}
-	@Override
-	public String toString() {
-		return "Data [icao24=" + icao24 + ", time_position=" + time_position + "]";
+
+
+
+
+	public void setAuSol(boolean auSol) {
+		this.auSol = auSol;
 	}
+
+
+
+
+	public boolean isaAjouter() {
+		return aAjouter;
+	}
+
+
+
+
+	public void setaAjouter(boolean aAjouter) {
+		this.aAjouter = aAjouter;
+	}
+
+
+
+
 	@Override
-	public int compareTo(Data arg0) {
+	public int compareTo(DataStat arg0) {
 		// TODO Auto-generated method stub
 		// correction 1 :
 		if (this.getIcao24().equals(arg0.getIcao24())&&(this.getTime_position()==arg0.getTime_position())) 
