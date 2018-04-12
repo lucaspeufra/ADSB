@@ -111,6 +111,7 @@ public class RecupHTTP extends TimerTask  {
 				BufferedReader br =	new BufferedReader(	new InputStreamReader(con.getInputStream()));
 				String input;
 				Scanner scan1;
+				DataDAOimpl ADSBbdd= new DataDAOimpl();
 
 
 				//Pattern delimiter= new 
@@ -147,19 +148,31 @@ public class RecupHTTP extends TimerTask  {
 					this.textArea.append("\n");*/
 
 						//pour tst
+						String nl="0";
 						DataStat adsb=new DataStat(data[0],0,Boolean.getBoolean(data[8]),false);
+						int i=0;
+						
+						for(i=0;i<data.length;i++)  /// pour enlveler le pb de parse avec la chaine null
+						{
+							if(data[i].contains("null"))
+							{data[i]=new String("0");}
+							//System.out.println(data[i]);
+						}
 						
 						
-						/*DataFull adsbstore=new DataFull(data[0],data[1],data[2],Integer.parseInt(data[3]),
+						
+						DataFull adsbstore=new DataFull(data[0],data[1],data[2],Integer.parseInt(data[3]),
 								Integer.parseInt(data[4]),Float.parseFloat(data[5]),Float.parseFloat(data[6]),
 								Float.parseFloat(data[7]),Boolean.getBoolean(data[8]),Float.parseFloat(data[9]),
 								Float.parseFloat(data[10]),Float.parseFloat(data[11]),Float.parseFloat(data[13]),
-								data[14],Boolean.getBoolean(data[15]),Integer.parseInt(data[16]));*/
+								data[14],Boolean.getBoolean(data[15]),Integer.parseInt(data[16]));
+						ADSBbdd.create(adsbstore);
 						
-						if (!data[3].equals("null"))
+						
+	/*					if (!data[3].equals("null"))
 						{
 							adsb.setTime_position(Integer.parseInt(data[3]));
-						}
+						}*/
 
 						//						int i=0;
 						//						int aut=1;

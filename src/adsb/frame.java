@@ -11,7 +11,6 @@ import java.util.TimerTask;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;

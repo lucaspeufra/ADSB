@@ -146,6 +146,12 @@ public class DataFull {
 		this.position_source = position_source;
 	}
 	
+	public String requete_creer() {
+		return "INSERT INTO `adsb` (`icao24`, `callsign`, `origin_country`, `time_position`, `last_contact`, `longitude`, `latitude`, `geo_altitude`, `on_ground`, `velocity`, `heading`, `vertical_rate`, `baro_altitude`, `squawk`, `spi`, `position_source`) VALUES ('"+this.getIcao24()+"', '"+this.getCallsign()+"', '"+this.getOrigin_country()+"', '"+this.getTime_position()+"', '"+this.getLast_contact()+"', '"+this.getLongitude()+"', '"+this.getLatitude()+"', '"+this.getGeo_altitude()+"', '"+this.isOn_ground()+"', '"+this.getVelocity()+"', '"+this.getHeading()+"', '"+this.getVertical_rate()+"', '"+this.getBaro_altitude()+"', '"+this.getSquawk()+"', '"+this.isSpi()+"', '"+this.getPosition_source()+"')";
+	}
+	
+	
+	
 	
 	
 	
