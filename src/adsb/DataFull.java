@@ -1,5 +1,7 @@
 package adsb;
 
+import java.util.ArrayList;
+
 public class DataFull {
 
 	private String icao24;
@@ -23,7 +25,6 @@ public class DataFull {
 		return icao24;
 	}
 	public void setIcao24(String icao24) {
-		this.icao24 = icao24;
 	}
 	public String getCallsign() {
 		return callsign;
@@ -38,6 +39,7 @@ public class DataFull {
 		this.origin_country = origin_country;
 	}
 	public int getTime_position() {
+		
 		return time_position;
 	}
 	public void setTime_position(int time_position) {
@@ -147,10 +149,55 @@ public class DataFull {
 	}
 	
 	public String requete_creer() {
-		return "INSERT INTO `adsb` (`icao24`, `callsign`, `origin_country`, `time_position`, `last_contact`, `longitude`, `latitude`, `geo_altitude`, `on_ground`, `velocity`, `heading`, `vertical_rate`, `baro_altitude`, `squawk`, `spi`, `position_source`) VALUES ('"+this.getIcao24()+"', '"+this.getCallsign()+"', '"+this.getOrigin_country()+"', '"+this.getTime_position()+"', '"+this.getLast_contact()+"', '"+this.getLongitude()+"', '"+this.getLatitude()+"', '"+this.getGeo_altitude()+"', '"+this.isOn_ground()+"', '"+this.getVelocity()+"', '"+this.getHeading()+"', '"+this.getVertical_rate()+"', '"+this.getBaro_altitude()+"', '"+this.getSquawk()+"', '"+this.isSpi()+"', '"+this.getPosition_source()+"')";
+		String requete ="INSERT INTO `adsb` (`icao24`, `callsign`, `origin_country`, `time_position`, `last_contact`, `longitude`, `latitude`, `geo_altitude`, "
+				+ "`on_ground`, `velocity`, `heading`, `vertical_rate`, `baro_altitude`, `squawk`, `spi`, `position_source`) VALUES "
+				+ "('"+this.getIcao24()+"', '"+this.getCallsign()+"', '"+this.getOrigin_country()+"', '"+this.getTime_position()+"', '"
+				+this.getLast_contact()+"', '"+this.getLongitude()+"', '"+this.getLatitude()+"', '"+this.getGeo_altitude()+"', '"+this.isOn_ground()+"', '"+
+				this.getVelocity()+"', '"+this.getHeading()+"', '"+this.getVertical_rate()+"', '"+this.getBaro_altitude()+"', '"+this.getSquawk()+"', '"+this.isSpi()+
+				"', '"+this.getPosition_source()+"')";
+		requete=requete.replace("'"+Integer.MAX_VALUE+"'","NULL");   /// gestion de la probleme de la chaine Null
+		Float flo=(float)Integer.MAX_VALUE;
+		requete=requete.replace("'"+flo+"'","NULL");				/// cas particulier du float qui ecrit des exposant dans la requete
+		return requete;
 	}
 	
-	
+	public String requete_creer_list(ArrayList<DataFull> Tamponsql) {
+		String requete="INSERT INTO `adsb` (`icao24`, `callsign`, `origin_country`, `time_position`, `last_contact`, `longitude`, "
+				+ "`latitude`, `geo_altitude`, `on_ground`, `velocity`, `heading`, `vertical_rate`, `baro_altitude`, `squawk`, `spi`, `position_source`) VALUES ";
+		int i;
+		for (i=0;i < Tamponsql.size();i++)
+		{
+		requete=requete+
+				"('"+
+				Tamponsql.get(i).getIcao24()+"','"+
+				Tamponsql.get(i).getCallsign()+	"','"+
+				Tamponsql.get(i).getOrigin_country()+"','"+
+				Tamponsql.get(i).getTime_position()+"','"+
+				Tamponsql.get(i).getLast_contact()+"','"+
+				Tamponsql.get(i).getLongitude()+"','"+
+				Tamponsql.get(i).getLatitude()+"','"+
+				Tamponsql.get(i).getGeo_altitude()+"','"+
+				Tamponsql.get(i).isOn_ground()+"','"+
+				Tamponsql.get(i).getVelocity()+"','"+
+				Tamponsql.get(i).getHeading()+"','"+
+				Tamponsql.get(i).getVertical_rate()+"','"+
+				Tamponsql.get(i).getBaro_altitude()+"','"+
+				Tamponsql.get(i).getSquawk()+"','"+
+				Tamponsql.get(i).isSpi()+"','"+
+				Tamponsql.get(i).getPosition_source()+
+				"')";
+				if(i==Tamponsql.size()-1)
+				{
+					requete=requete+ ";";
+				}
+				else
+					requete=requete+',';
+		}
+		requete=requete.replace("'"+Integer.MAX_VALUE+"'","NULL");   /// gestion de la probleme de la chaine Null
+		Float flo=(float)Integer.MAX_VALUE;
+		requete=requete.replace("'"+flo+"'","NULL");				/// cas particulier du float qui ecrit des exposant dans la requete
+		return requete;
+	}
 	
 	
 	

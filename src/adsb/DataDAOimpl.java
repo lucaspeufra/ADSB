@@ -32,6 +32,32 @@ public class DataDAOimpl extends DataDAO  {
 		}
 		fermerConnect(connexion);
 	}
+	
+	public void create(ArrayList<DataFull> Tamponsql) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Connection connexion = connect();
+		java.sql.Statement stmt;
+		DataFull p =new DataFull(sql, sql, sql, 0, 0, 0, 0, 0, false, 0, 0, 0, 0, sql, false, 0);
+	//	String idPersonne = p.getIdPersonne();
+	//	String nom = p.getNom();
+	//	String prenom = p.getPrenom();
+		try {
+			stmt = connexion.createStatement();
+//			sql = "INSERT INTO Personne (IdPersonne, nom, prenom) VALUES ('"
+//					+ idPersonne + "','" + nom + "','" + prenom + "')";
+				sql = p.requete_creer_list(Tamponsql);
+				stmt.executeUpdate(sql);// On execute la requete avec update
+			
+			
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		fermerConnect(connexion);
+	}
+	
 
 	@Override
 	public ArrayList<DataFull> findAll() {

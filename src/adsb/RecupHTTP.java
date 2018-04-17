@@ -18,14 +18,12 @@ import javax.swing.JTextArea;
 
 public class RecupHTTP extends TimerTask  {
 
-	private JTextArea textArea;
+	private ArrayList<DataFull> Tamponsql ;
 	public RecupHTTP(JTextArea textArea, ArrayList<DataStat> listeData, String https_url) {
 		super();
-		this.textArea = textArea;
 		ListeData = listeData;
 		this.https_url = https_url;
-		this.textArea.append("Time;donnee totale;donnee non redondante");
-	}
+		}
 
 	private ArrayList<DataStat> ListeData = new ArrayList<DataStat>();
 	private static double cpt=0;
@@ -112,7 +110,7 @@ public class RecupHTTP extends TimerTask  {
 				String input;
 				Scanner scan1;
 				DataDAOimpl ADSBbdd= new DataDAOimpl();
-
+				Tamponsql =new ArrayList<DataFull>();
 
 				//Pattern delimiter= new 
 
@@ -123,12 +121,26 @@ public class RecupHTTP extends TimerTask  {
 +					scan2.next();
 +					scan2.reset();
 +					input =scan2.next();*/
+					//input=input.replace(']',' ');
+					input=input.replace("[","");
+					input=input.replace("}","");
+					input=input.replace('"', ' ');
+					input=input.replace("'", "-");/// tentative d'elimination du pb de requete sql
+						
+					input=input.replace(" ","");
+					
 					scan1=new Scanner(input);
-
-					scan1.useDelimiter("],");
-					//System.out.println(scan1.next());
+					//System.out.println(input);
+					scan1.useDelimiter(":");
+					scan1.next();/// elimination du premier champs inutile
 					scan1.next();
+					scan1.reset();
+					scan1.useDelimiter("],");
+					
+					//System.out.println(scan1.next());
+					//scan1.next();  debug
 					while(scan1.hasNext())	{
+						
 						//	System.out.println(cpt+"--"+scan1.next() );
 						//	this.textPane_1.setText(cpt+"--"+scan1.next()+"\n");
 						//	this.textArea.append(cpt+"--"+scan1.next()+"\n");
@@ -138,6 +150,16 @@ public class RecupHTTP extends TimerTask  {
 						//	this.textPane_1.setText(cpt+"--"+scan1.next()+"\n");
 
 						String ligne =scan1.next();
+					
+						if (ligne.contains(":"))
+							ligne=ligne.replace(":", " "); /// traitement du caracter : de debut
+							
+						
+						if (ligne.contains("]"))
+						ligne=ligne.replace("]", ""); /// traitement du caracter  de fin
+						
+					
+						
 						//	this.textArea.append(cpt+"--"+ligne+"\n");
 						String [] data=ligne.split(",");
 						//	this.textArea.append(cpt+"-x-");
@@ -148,14 +170,14 @@ public class RecupHTTP extends TimerTask  {
 					this.textArea.append("\n");*/
 
 						//pour tst
-						String nl="0";
-						DataStat adsb=new DataStat(data[0],0,Boolean.getBoolean(data[8]),false);
+					
+						DataStat adsb=new DataStat(data[0],0,Boolean.valueOf(data[8]),false);
 						int i=0;
 						
 						for(i=0;i<data.length;i++)  /// pour enlveler le pb de parse avec la chaine null
 						{
 							if(data[i].contains("null"))
-							{data[i]=new String("0");}
+							{data[i]=new String(""+Integer.MAX_VALUE);}    ///// creation d'une valeur caracteristique du champ null Integer.MAX_VALUE pour pouvoir retouver le champ null
 							//System.out.println(data[i]);
 						}
 						
@@ -163,13 +185,13 @@ public class RecupHTTP extends TimerTask  {
 						
 						DataFull adsbstore=new DataFull(data[0],data[1],data[2],Integer.parseInt(data[3]),
 								Integer.parseInt(data[4]),Float.parseFloat(data[5]),Float.parseFloat(data[6]),
-								Float.parseFloat(data[7]),Boolean.getBoolean(data[8]),Float.parseFloat(data[9]),
+								Float.parseFloat(data[7]),Boolean.valueOf(data[8]),Float.parseFloat(data[9]),
 								Float.parseFloat(data[10]),Float.parseFloat(data[11]),Float.parseFloat(data[13]),
-								data[14],Boolean.getBoolean(data[15]),Integer.parseInt(data[16]));
-						ADSBbdd.create(adsbstore);
+								data[14],Boolean.valueOf(data[15]),Integer.parseInt(data[16]));
 						
 						
-	/*					if (!data[3].equals("null"))
+						
+	/*				a	if (!data[3].equals("null"))
 						{
 							adsb.setTime_position(Integer.parseInt(data[3]));
 						}*/
@@ -200,6 +222,8 @@ public class RecupHTTP extends TimerTask  {
 							else adsb.setaAjouter(true);
 							ListeData.add(adsb);
 							compteurvalide++;
+							Tamponsql.add(adsbstore);
+							
 						}
 						
 						
@@ -232,6 +256,7 @@ public class RecupHTTP extends TimerTask  {
 										
 										
 										compteurvalide++;
+										Tamponsql.add(adsbstore);
 										ListeData.add(adsb);
 										ListeData.remove(j);
 									}
@@ -252,6 +277,7 @@ public class RecupHTTP extends TimerTask  {
 											}
 										else adsb.setaAjouter(true);
 										compteurvalide++;
+										Tamponsql.add(adsbstore);
 										ListeData.add(adsb);
 									}
 								}
@@ -264,7 +290,8 @@ public class RecupHTTP extends TimerTask  {
 						}
 
 					}
-
+					// Ecriture dans la base de donnees
+					ADSBbdd.create(Tamponsql);
 
 					init=1;	
 //					int i;
@@ -274,11 +301,11 @@ public class RecupHTTP extends TimerTask  {
 //					}
 
 					frequence++;
-					if (frequence>=1)
+					if (frequence>=30)/// on vient ici toute les 30 * 10 s soit 300 s = 5 min
 					{
 						System.out.println("time:" + new Date());
 						System.out.println("total="+cpt );
-						System.out.println("retenu="+compteurvalide );
+						System.out.println("retenu="+ compteurvalide );
 						System.out.println("vols="+compteurvol);
 						frequence=0;
 						this.ecrireFichier(nomfic, ""+new Date()+";"+cpt+";"+compteurvalide+";"+compteurvol,false);
@@ -351,6 +378,14 @@ public class RecupHTTP extends TimerTask  {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public ArrayList<DataFull> getTamponsql() {
+		return Tamponsql;
+	}
+
+	public void setTamponsql(ArrayList<DataFull> tamponsql) {
+		Tamponsql = tamponsql;
 	}
 
 

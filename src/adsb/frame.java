@@ -4,7 +4,9 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -93,6 +95,9 @@ public class frame implements ActionListener{
 		//this.testIt();
 		//"textArea," enelvé en premier argument
 		RecupHTTP osky=new RecupHTTP(ListeData, "https://opensky-network.org/api/states/all");
+		DateFormat shortDateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT);
+				
+				 
 		 TimerTask timerTask = osky;//new RecupHTTP(textArea,ListeData, "https://opensky-network.org/api/states/all");
 		 osky.ecrireFichier("suivi.txt", "time;total;exploitable;vols",true);/// initialisation du fichier de suivi stat
 			
