@@ -5,7 +5,7 @@ public class DataStat implements Comparable<DataStat> {
 	private int time_position;
 	private boolean auSol;
 	private boolean aAjouter;
-
+	private double TTL = 30; /// temps d'expiration avant d etre flusher de la table
 	
 	
 	
@@ -117,6 +117,20 @@ public class DataStat implements Comparable<DataStat> {
 
 
 
+	}
+
+
+
+
+	public double getTTL() {
+		return TTL;
+	}
+
+
+
+
+	public void setTTL(double tTL) {
+		TTL = tTL;
 	}
 	
 	
