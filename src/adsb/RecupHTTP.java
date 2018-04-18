@@ -189,6 +189,7 @@ public class RecupHTTP extends TimerTask  {
 								Float.parseFloat(data[10]),Float.parseFloat(data[11]),Float.parseFloat(data[13]),
 								data[14],Boolean.valueOf(data[15]),Integer.parseInt(data[16]));
 						
+						adsb.setTime_position(adsbstore.getLast_contact());/// tentative d'indentification de donnee non redondante par le last contact
 						
 						
 	/*				a	if (!data[3].equals("null"))
@@ -245,7 +246,7 @@ public class RecupHTTP extends TimerTask  {
 										if (ListeData.get(j).isaAjouter()==true && adsb.isAuSol() ==false) {
 											adsb.setaAjouter(false);
 											compteurvol++;
-											System.out.println(adsb.getIcao24());
+										//	System.out.println(adsb.getIcao24());
 										}
 										
 										else {

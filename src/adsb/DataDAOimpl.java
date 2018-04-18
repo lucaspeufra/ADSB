@@ -43,17 +43,23 @@ public class DataDAOimpl extends DataDAO  {
 	//	String nom = p.getNom();
 	//	String prenom = p.getPrenom();
 		try {
-			stmt = connexion.createStatement();
-//			sql = "INSERT INTO Personne (IdPersonne, nom, prenom) VALUES ('"
-//					+ idPersonne + "','" + nom + "','" + prenom + "')";
+				if(Tamponsql.size()>0)  ///;on ecrit que si il y a qq chose dans liste
+				{
+					stmt = connexion.createStatement();
+//					sql = "INSERT INTO Personne (IdPersonne, nom, prenom) VALUES ('"
+//							+ idPersonne + "','" + nom + "','" + prenom + "')";
+					
 				sql = p.requete_creer_list(Tamponsql);
 				stmt.executeUpdate(sql);// On execute la requete avec update
+				stmt.close();
+
+				}
 			
 			
-			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.err.println(sql);
 		}
 		fermerConnect(connexion);
 	}
