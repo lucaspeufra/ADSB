@@ -18,7 +18,24 @@ public class DataFull {
 	protected boolean spi;
 	protected int position_source;
 	
+	
+	public String getIcao24() {
+		return icao24;
+	}
 	public void setIcao24(String icao24) {
+		this.icao24 = icao24;
+	}
+	public int getLast_contact() {
+		return last_contact;
+	}
+	public void setLast_contact(int last_contact) {
+		this.last_contact = last_contact;
+	}
+	public boolean isOn_ground() {
+		return on_ground;
+	}
+	public void setOn_ground(boolean on_ground) {
+		this.on_ground = on_ground;
 	}
 	public String getCallsign() {
 		return callsign;
@@ -33,7 +50,6 @@ public class DataFull {
 		this.origin_country = origin_country;
 	}
 	public int getTime_position() {
-		
 		return time_position;
 	}
 	public void setTime_position(int time_position) {
@@ -65,21 +81,6 @@ public class DataFull {
 	}
 	public float getHeading() {
 		return heading;
-	}
-	public int getLast_contact() {
-		return last_contact;
-	}
-	public void setLast_contact(int last_contact) {
-		this.last_contact = last_contact;
-	}
-	public boolean isOn_ground() {
-		return on_ground;
-	}
-	public void setOn_ground(boolean on_ground) {
-		this.on_ground = on_ground;
-	}
-	public String getIcao24() {
-		return icao24;
 	}
 	public void setHeading(float heading) {
 		this.heading = heading;

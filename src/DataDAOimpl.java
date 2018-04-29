@@ -19,7 +19,8 @@ public class DataDAOimpl extends DataDAO  {
 		try {
 			stmt = connexion.createStatement();
 			sql = this.requete_creer(p);
-			stmt.executeUpdate(sql);// On execute la requete avec update
+			int toto=stmt.executeUpdate(sql);// On execute la requete avec update
+			System.out.println("-"+toto+"--");
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -33,7 +34,6 @@ public class DataDAOimpl extends DataDAO  {
 		String sql="";
 		Connection connexion = connect();
 		java.sql.Statement stmt;
-		DataFull p =new DataFull(sql, sql, sql, 0, 0, 0, 0, 0, false, 0, 0, 0, 0, sql, false, 0);
 		try {
 				if(Tamponsql.size()>0)  ///;on ecrit que si il y a qq chose dans liste
 				{
@@ -46,11 +46,45 @@ public class DataDAOimpl extends DataDAO  {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 			System.err.println(sql);
+			
+			e.printStackTrace();
 		}
 		fermerConnect(connexion);
 	}
+	
+	public String request(String longi_lo,String longi_hi,String lati_lo,String lati_hi,String alti_lo,String alti_hi,String date_lo,String date_hi,boolean type_alti) 
+	{
+		String out;
+		if(type_alti) /// cas de la geoaltitude
+		{
+		out="SELECT * FROM `adsb` WHERE `longitude` BETWEEN"+longi_lo+"AND"+longi_hi+"AND "+
+		"`latitude` BETWEEN "+lati_lo+"AND"+lati_hi+"AND"+
+		"`geo_altitude`BETWEEN "+alti_lo+"AND"+alti_hi+"AND"+
+		"`time_position` BETWEEN "+date_lo+"AND"+date_hi;
+		}
+		else
+		{
+
+			out="SELECT * FROM `adsb` WHERE `longitude` BETWEEN"+longi_lo+"AND"+longi_hi+"AND "+
+			"`latitude` BETWEEN "+lati_lo+"AND"+lati_hi+"AND"+
+			"`baro_altitude`BETWEEN "+alti_lo+"AND"+alti_hi+"AND"+
+			"`time_position` BETWEEN "+date_lo+"AND"+date_hi;
+			
+		}
+		
+		return out;
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 
 	@Override
@@ -155,7 +189,7 @@ public class DataDAOimpl extends DataDAO  {
 	}
 	
 	private String requete_creer(DataFull data) {
-		String requete ="INSERT INTO `adsb` (`icao24`, `callsign`, `origin_country`, `time_position`, `last_contact`, `longitude`, `latitude`, `geo_altitude`, "
+		String requete ="INSERT IGNORE INTO `adsb` (`icao24`, `callsign`, `origin_country`, `time_position`, `last_contact`, `longitude`, `latitude`, `geo_altitude`, "
 				+ "`on_ground`, `velocity`, `heading`, `vertical_rate`, `baro_altitude`, `squawk`, `spi`, `position_source`) VALUES "
 				+ "('"+data.getIcao24()+"', '"+data.getCallsign()+"', '"+data.getOrigin_country()+"', '"+data.getTime_position()+"', '"
 				+data.getLast_contact()+"', '"+data.getLongitude()+"', '"+data.getLatitude()+"', '"+data.getGeo_altitude()+"', '"+data.isOn_ground()+"', '"+
@@ -168,7 +202,7 @@ public class DataDAOimpl extends DataDAO  {
 	}
 	
 	private String requete_creer_list(ArrayList<DataFull> Tamponsql) {
-		String requete="INSERT INTO `adsb` (`icao24`, `callsign`, `origin_country`, `time_position`, `last_contact`, `longitude`, "
+		String requete="INSERT IGNORE INTO `adsb` (`icao24`, `callsign`, `origin_country`, `time_position`, `last_contact`, `longitude`, "
 				+ "`latitude`, `geo_altitude`, `on_ground`, `velocity`, `heading`, `vertical_rate`, `baro_altitude`, `squawk`, `spi`, `position_source`) VALUES ";
 		int i;
 		

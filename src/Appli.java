@@ -57,7 +57,7 @@ public class Appli extends JFrame {
 	public Appli() {
 		super("PEUFRADSB");
 		
-		this.setPreferredSize(new Dimension(1100,200));
+		this.setPreferredSize(new Dimension(1300,200));
 		Get_adsb=new OSKY_impl(this);
 		controleur=new Controleur(this, Get_adsb);
 		

@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -9,7 +8,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,11 +32,12 @@ public abstract  class GET_ADSB extends Timer{
 	protected int init=0;						//Cette variable permet de savoir si c'est la premier connexion au flux
 
 	protected String nomfic="suivi.txt";		//Ici on precise le nom du fichier du suivi csv pour les stats
-	protected int fich_periode=10;			//ici on regle la periode a laquelle on va ecrire les stats dans le fichier ci dessus en seconde
+	protected int fich_periode=1;			//ici on regle la periode a laquelle on va ecrire les stats dans le fichier ci dessus en seconde
 
 
 
 	protected Appli apt;						// Classe de la Vu concerne
+	protected vue4d vue4;						// Classe de la Vu concerne
 
 
 
@@ -53,6 +52,15 @@ public abstract  class GET_ADSB extends Timer{
 		
 		
 	}
+	public GET_ADSB(vue4d apt) {
+		super();
+		
+		this.vue4=apt;
+		if (ADSBbdd == null)			// singleton PATTERN
+			ADSBbdd= new DataDAOimpl();		// on instancie l'object que si il ne l'est pas deja 
+		
+		
+	}
 
 	
 	public void start()
@@ -61,14 +69,17 @@ public abstract  class GET_ADSB extends Timer{
 				task = new TimerTask(){		
 					public void run(){
 
-						
+						String input=recuperationDonnees(connexionFlux());
+					//	System.out.println(input);
+						ArrayList<DataStat> input_parse=parse_input(input);
+					//	System.out.println(input_parse);
+						ArrayList<DataFull> tampon_sql=analyseDonnee(input_parse);
 						// Ecriture dans la base de donnees
-						ADSBbdd.create(analyseDonnee(parse_input(recuperationDonnees(connexionFlux()))));
+						ADSBbdd.create(tampon_sql);
 						apt.getRequete().setForeground(apt.vert);
 
 						write_stat();
 						verfierExpiration();
-						System.out.println(""+task.scheduledExecutionTime());
 						
 
 					}
@@ -154,72 +165,7 @@ public abstract  class GET_ADSB extends Timer{
 	}
 
 	protected abstract ArrayList<DataStat> parse_input (String input);
-	/*{
-		Scanner scan1=new Scanner(input);
-		//scan1=new Scanner(input);
-
-		ArrayList<DataStat> input_liste= new ArrayList<DataStat>();
-		input=input.replace("[","");
-		input=input.replace("}","");
-		input=input.replace('"', ' ');
-		input=input.replace("'", "-");/// tentative d'elimination du pb de requete sql
-
-		input=input.replace(" ","");
-
-		scan1.useDelimiter(":");
-		scan1.next();/// elimination du premier champs inutile
-		scan1.next();
-		scan1.reset();
-		scan1.useDelimiter("],");
-
-		apt.getConnexion().setForeground(new Color(0,205,0));
-
-
-		while(scan1.hasNext())	{
-
-			cpt++;
-
-
-			String ligne =scan1.next();
-
-			if (ligne.contains(":"))
-				ligne=ligne.replace(":", " "); /// traitement du caracter : de debut
-
-
-			if (ligne.contains("]"))
-				ligne=ligne.replace("]", ""); /// traitement du caracter  de fin
-
-
-
-
-			String [] data=ligne.split(",");
-
-			int i=0;
-			for(i=0;i<data.length;i++)  /// pour enlveler le pb de parse avec la chaine null
-			{
-
-				if(data[i].contains("null"))
-				{data[i]=new String(""+Integer.MAX_VALUE);}    ///// creation d'une valeur caracteristique du champ null Integer.MAX_VALUE pour pouvoir retouver le champ null
-
-			}
-
-
-			DataStat adsb=new DataStat(data[0],data[1],data[2],Integer.parseInt(data[3]),
-					Integer.parseInt(data[4]),Float.parseFloat(data[5]),Float.parseFloat(data[6]),
-					Float.parseFloat(data[7]),Boolean.valueOf(data[8]),Float.parseFloat(data[9]),
-					Float.parseFloat(data[10]),Float.parseFloat(data[11]),Float.parseFloat(data[13]),
-					data[14],Boolean.valueOf(data[15]),Integer.parseInt(data[16]),false);
-			input_liste.add(adsb);
-
-		}
-		apt.getAnalyse().setForeground(apt.vert);
-		apt.getRequete().setForeground(apt.orange);
-		init=1;	
-		frequence++;
-		return input_liste;
-	}
-
-*/
+	
 	private ArrayList<DataFull> analyseDonnee(ArrayList<DataStat> data) {
 
 		ArrayList<DataFull> Tamponsql =new ArrayList<DataFull>();
@@ -230,7 +176,7 @@ public abstract  class GET_ADSB extends Timer{
 		{
 			int j=0;
 			int n=ListeData.size();
-
+		
 			if (init==0) {
 
 				if (data.get(ptr_data).on_ground==false) {
@@ -245,7 +191,7 @@ public abstract  class GET_ADSB extends Timer{
 				ListeData.add(data.get(ptr_data));
 				compteurvalide++;
 				Tamponsql.add((DataFull)data.get(ptr_data));
-
+				init=1;
 			}
 
 			else {
@@ -303,7 +249,8 @@ public abstract  class GET_ADSB extends Timer{
 				}
 			}
 		}
-
+			
+		
 		return Tamponsql;
 	}
 
@@ -318,7 +265,6 @@ public abstract  class GET_ADSB extends Timer{
 	
 	private void write_stat()
 	{
-		System.out.println("dqhshdk");
 	if (frequence>=fich_periode)/// on vient ici toute les 30 * 10 s soit 300 s = 5 min
 	{
 		affichage();

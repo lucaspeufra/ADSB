@@ -10,12 +10,18 @@ public class OSKY_impl extends GET_ADSB{
 		// TODO Auto-generated constructor stub
 	}
 
+
+	public OSKY_impl(vue4d apt) {
+		super(apt);
+		// TODO Auto-generated constructor stub
+	}
+
+	
 	@Override
 	protected ArrayList<DataStat> parse_input(String input) {
 		// TODO Auto-generated method stub
-		Scanner scan1=new Scanner(input);
-		//scan1=new Scanner(input);
-
+		Scanner scan1;
+		
 		ArrayList<DataStat> input_liste= new ArrayList<DataStat>();
 		input=input.replace("[","");
 		input=input.replace("}","");
@@ -24,12 +30,13 @@ public class OSKY_impl extends GET_ADSB{
 
 		input=input.replace(" ","");
 
+		scan1=new Scanner(input);
 		scan1.useDelimiter(":");
 		scan1.next();/// elimination du premier champs inutile
 		scan1.next();
 		scan1.reset();
 		scan1.useDelimiter("],");
-
+		
 		apt.getConnexion().setForeground(new Color(0,205,0));
 
 
@@ -72,14 +79,11 @@ public class OSKY_impl extends GET_ADSB{
 		}
 		apt.getAnalyse().setForeground(apt.vert);
 		apt.getRequete().setForeground(apt.orange);
-		init=1;	
 		frequence++;
 		return input_liste;
 
 		
 		
-		
-		return null;
 	}
 
 	
