@@ -1,21 +1,22 @@
-public class DataFull extends DataStat{
+public class DataFull {
 
-	//private String icao24;
-	private String callsign;
-	private String origin_country;
-	private int time_position;
-	//private int last_contact;
-	private float longitude;
-	private float latitude;
-	private float geo_altitude;
-	//private boolean on_ground;
-	private float velocity;
-	private float heading;
-	private float vertical_rate;
-	private float baro_altitude;
-	private String squawk;
-	private boolean spi;
-	private int position_source;
+	protected String icao24;
+	protected int last_contact;
+	protected boolean on_ground;
+	
+	protected String callsign;
+	protected String origin_country;
+	protected int time_position;
+	protected float longitude;
+	protected float latitude;
+	protected float geo_altitude;
+	protected float velocity;
+	protected float heading;
+	protected float vertical_rate;
+	protected float baro_altitude;
+	protected String squawk;
+	protected boolean spi;
+	protected int position_source;
 	
 	public void setIcao24(String icao24) {
 	}
@@ -65,6 +66,21 @@ public class DataFull extends DataStat{
 	public float getHeading() {
 		return heading;
 	}
+	public int getLast_contact() {
+		return last_contact;
+	}
+	public void setLast_contact(int last_contact) {
+		this.last_contact = last_contact;
+	}
+	public boolean isOn_ground() {
+		return on_ground;
+	}
+	public void setOn_ground(boolean on_ground) {
+		this.on_ground = on_ground;
+	}
+	public String getIcao24() {
+		return icao24;
+	}
 	public void setHeading(float heading) {
 		this.heading = heading;
 	}
@@ -110,7 +126,7 @@ public class DataFull extends DataStat{
 	public DataFull(String icao24, String callsign, String origin_country, int time_position, int last_contact,
 			float longitude, float latitude, float geo_altitude, boolean on_ground, float velocity, float heading,
 			float vertical_rate, float baro_altitude, String squawk, boolean spi, int position_source) {
-		super(icao24, last_contact, on_ground, false);
+		super();
 		this.icao24 = icao24;
 		this.callsign = callsign;
 		this.origin_country = origin_country;

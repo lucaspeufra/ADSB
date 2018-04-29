@@ -1,14 +1,15 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Timer;
 
 import javax.swing.JOptionPane;
 
-public class Controleur implements ActionListener {
+public class Controleur extends Timer implements ActionListener {
 	//private MonTimer timer;
 	private Appli apt;	
-	private Traitement traitement;
+	private GET_ADSB traitement;
 	
-	public Controleur(Appli apt, Traitement traitement) {
+	public Controleur(Appli apt, GET_ADSB traitement) {
 		super();
 		this.apt = apt;
 		this.traitement = traitement;
@@ -29,7 +30,8 @@ public class Controleur implements ActionListener {
 		break;
 
 
-		case "QUITTER" : System.exit(0); 
+		case "QUITTER" :
+			System.exit(0); 
 		break;
 
 		case "CHARGERS" : // menu charger

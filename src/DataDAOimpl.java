@@ -16,13 +16,8 @@ public class DataDAOimpl extends DataDAO  {
 		String sql;
 		Connection connexion = connect();
 		java.sql.Statement stmt;
-	//	String idPersonne = p.getIdPersonne();
-	//	String nom = p.getNom();
-	//	String prenom = p.getPrenom();
 		try {
 			stmt = connexion.createStatement();
-//			sql = "INSERT INTO Personne (IdPersonne, nom, prenom) VALUES ('"
-//					+ idPersonne + "','" + nom + "','" + prenom + "')";
 			sql = this.requete_creer(p);
 			stmt.executeUpdate(sql);// On execute la requete avec update
 			stmt.close();
@@ -39,20 +34,13 @@ public class DataDAOimpl extends DataDAO  {
 		Connection connexion = connect();
 		java.sql.Statement stmt;
 		DataFull p =new DataFull(sql, sql, sql, 0, 0, 0, 0, 0, false, 0, 0, 0, 0, sql, false, 0);
-	//	String idPersonne = p.getIdPersonne();
-	//	String nom = p.getNom();
-	//	String prenom = p.getPrenom();
 		try {
 				if(Tamponsql.size()>0)  ///;on ecrit que si il y a qq chose dans liste
 				{
 					stmt = connexion.createStatement();
-//					sql = "INSERT INTO Personne (IdPersonne, nom, prenom) VALUES ('"
-//							+ idPersonne + "','" + nom + "','" + prenom + "')";
-					
 				sql = this.requete_creer_list(Tamponsql);
 				stmt.executeUpdate(sql);// On execute la requete avec update
 				stmt.close();
-
 				}
 			
 			

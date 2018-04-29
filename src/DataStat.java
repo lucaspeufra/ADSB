@@ -1,9 +1,6 @@
 
 
-public class DataStat implements Comparable<DataStat> {
-	protected String icao24;
-	protected int last_contact;
-	protected boolean on_ground;
+public class DataStat extends DataFull{
 	protected boolean aAjouter;
 	protected double TTL = 30; /// temps d'expiration avant d etre flusher de la table
 	
@@ -15,42 +12,18 @@ public class DataStat implements Comparable<DataStat> {
 
 
 
-	public boolean isOn_ground() {
-		return on_ground;
-	}
 
 
-
-
-	public void setOn_ground(boolean on_ground) {
-		this.on_ground = on_ground;
-	}
-
-
-
-
-	public String getIcao24() {
-		return icao24;
-	}
-
-
-
-
-	public DataStat(String icao24, int last_contact, boolean on_ground, boolean aAjouter) {
-		super();
-		this.icao24 = icao24;
-		this.last_contact = last_contact;
-		this.on_ground = on_ground;
+	public DataStat(String icao24, String callsign, String origin_country, int time_position, int last_contact,
+			float longitude, float latitude, float geo_altitude, boolean on_ground, float velocity, float heading,
+			float vertical_rate, float baro_altitude, String squawk, boolean spi, int position_source, boolean aAjouter) {
+		
+		super(icao24, callsign, origin_country, time_position, last_contact, longitude, latitude,geo_altitude, on_ground,velocity, heading, vertical_rate,
+				baro_altitude, squawk, spi,  position_source);
 		this.aAjouter = aAjouter;
 		
 	}
 
-
-
-
-	public void setIcao24(String icao24) {
-		this.icao24 = icao24;
-	}
 
 
 
@@ -69,7 +42,7 @@ public class DataStat implements Comparable<DataStat> {
 	}
 
 
-
+/*
 
 	@Override
 	public int compareTo(DataStat arg0) {
@@ -96,14 +69,14 @@ public class DataStat implements Comparable<DataStat> {
 		/*
 		return Double.compare(this.getPoids(), arg0.getPoids());
 
-		 */
+		 
 
 
 
 
 
 
-	}
+	}*/
 
 
 

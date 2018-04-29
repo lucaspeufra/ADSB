@@ -51,16 +51,15 @@ public class Appli extends JFrame {
 
 
 	
-	private Traitement traitement;
+	private OSKY_impl Get_adsb;
 
 
 	public Appli() {
 		super("PEUFRADSB");
 		
 		this.setPreferredSize(new Dimension(1100,200));
-		traitement=new Traitement( this);
-		
-		controleur=new Controleur(this, traitement);
+		Get_adsb=new OSKY_impl(this);
+		controleur=new Controleur(this, Get_adsb);
 		
 		
 		Container contenu= this.getContentPane();
