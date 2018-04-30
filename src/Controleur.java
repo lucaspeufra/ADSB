@@ -9,7 +9,7 @@ public class Controleur extends Timer implements ActionListener {
 	//private MonTimer timer;
 	private Appli apt;	
 	private GET_ADSB traitement;
-	private vue4d vue4;	
+	//private vue4d vue4;	
 	
 	public Controleur(Appli apt, GET_ADSB traitement) {
 		super();
@@ -17,9 +17,9 @@ public class Controleur extends Timer implements ActionListener {
 		this.traitement = traitement;
 	}
 
-	public Controleur(vue4d apt, GET_ADSB traitement) {
+	public Controleur( GET_ADSB traitement) {
 		super();
-		this.vue4 = apt;
+		//this.vue4 = apt;
 		this.traitement = traitement;
 	}
 
@@ -43,7 +43,7 @@ public class Controleur extends Timer implements ActionListener {
 		break;
 
 		case "4D" :
-			System.exit(0); 
+			traitement.requete4d();
 		break;
 
 		
@@ -52,8 +52,7 @@ public class Controleur extends Timer implements ActionListener {
 
 			String inputValue = JOptionPane.showInputDialog("Donnez l'adresse de la source :","https://opensky-network.org/api/states/all");
 			apt.setAdresseSource(inputValue);
-			//if (!apt.getAdresseBDD().isEmpty()) apt.getCharger().setForeground(apt.vert);
-
+			
 		}
 		break;
 

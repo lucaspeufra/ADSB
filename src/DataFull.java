@@ -124,6 +124,23 @@ public class DataFull {
 				+ ", baro_altitude=" + baro_altitude + ", squawk=" + squawk + ", spi=" + spi + ", position_source="
 				+ position_source + "]";
 	}
+	
+	public String toCsv() {
+		return  icao24 + ";" + callsign +";" + origin_country
+				+ ";"+ time_position + ";" + last_contact + ";" + longitude +";"+ latitude 
+				+  ";"+ geo_altitude + ";" + on_ground
+				+ ";" + velocity +";"+ heading + ";" + vertical_rate
+				+ ";" + baro_altitude + ";" + squawk + ";" + spi + ";"
+				+ position_source + "\n";
+	}
+	
+	public String headCsv()
+	{
+		return "icao24;callsign;origin_country;time_position;last_contact;longitude;"
+				+ "latitude;geo_altitude;on_ground;velocity;heading;vertical_rate;"
+				+ "baro_altitude;squawk;spi;position_source\n";
+	}
+	
 	public DataFull(String icao24, String callsign, String origin_country, int time_position, int last_contact,
 			float longitude, float latitude, float geo_altitude, boolean on_ground, float velocity, float heading,
 			float vertical_rate, float baro_altitude, String squawk, boolean spi, int position_source) {

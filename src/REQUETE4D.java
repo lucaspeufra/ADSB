@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JCheckBox;
+import javax.swing.JRadioButton;
 
 public class REQUETE4D {
 
@@ -21,6 +23,7 @@ public class REQUETE4D {
 	private JTextField altitude_hi;
 	private JTextField Date_lo;
 	private JTextField Date_hi;
+	private JTextField txtFichcsv;
 
 	
 	
@@ -66,7 +69,7 @@ public class REQUETE4D {
 		JButton btnEnvoyer = new JButton("Envoyer");
 				
 				
-		btnEnvoyer.setBounds(294, 201, 117, 25);
+		btnEnvoyer.setBounds(294, 232, 117, 25);
 		frame.getContentPane().add(btnEnvoyer);
 		
 		longitude_lo = new JTextField("longitude_lo");
@@ -100,12 +103,12 @@ public class REQUETE4D {
 		altitude_hi.setColumns(10);
 		
 		Date_lo = new JTextField();
-		Date_lo.setBounds(114, 140, 114, 19);
+		Date_lo.setBounds(114, 196, 114, 19);
 		frame.getContentPane().add(Date_lo);
 		Date_lo.setColumns(10);
 		
 		Date_hi = new JTextField();
-		Date_hi.setBounds(280, 140, 114, 19);
+		Date_hi.setBounds(280, 196, 114, 19);
 		frame.getContentPane().add(Date_hi);
 		Date_hi.setColumns(10);
 		
@@ -122,12 +125,30 @@ public class REQUETE4D {
 		frame.getContentPane().add(lblAltitude);
 		
 		JLabel lblDate = new JLabel("Date");
-		lblDate.setBounds(12, 142, 70, 15);
+		lblDate.setBounds(12, 198, 70, 15);
 		frame.getContentPane().add(lblDate);
 		
 		JTextArea txtrApercu = new JTextArea();
 		txtrApercu.setText("apercu");
 		txtrApercu.setBounds(12, 269, 426, 304);
 		frame.getContentPane().add(txtrApercu);
+		
+		JCheckBox baro_altitude = new JCheckBox("Baro altitude");
+		baro_altitude.setBounds(28, 141, 129, 23);
+		frame.getContentPane().add(baro_altitude);
+		
+		JCheckBox geo_altitude = new JCheckBox("Geo altitude");
+		geo_altitude.setBounds(190, 141, 129, 23);
+		frame.getContentPane().add(geo_altitude);
+		
+		JLabel lblNomFichier = new JLabel("Nom fichier");
+		lblNomFichier.setBounds(12, 237, 96, 15);
+		frame.getContentPane().add(lblNomFichier);
+		
+		txtFichcsv = new JTextField();
+		txtFichcsv.setText("testrequ4d.csv");
+		txtFichcsv.setBounds(114, 235, 114, 19);
+		frame.getContentPane().add(txtFichcsv);
+		txtFichcsv.setColumns(10);
 	}
 }

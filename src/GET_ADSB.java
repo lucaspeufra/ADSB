@@ -14,6 +14,8 @@ import java.util.TimerTask;
 import javax.net.ssl.HttpsURLConnection;
 import javax.swing.JLabel;
 
+import org.omg.IOP.TAG_MULTIPLE_COMPONENTS;
+
 public abstract  class GET_ADSB extends Timer{
 
 	protected TimerTask task;					//Objet de Tache periodique 
@@ -45,80 +47,80 @@ public abstract  class GET_ADSB extends Timer{
 
 	public GET_ADSB(Appli apt) {
 		super();
-		
+
 		ListeData = new ArrayList<DataStat>();;
 		this.apt=apt;
 		if (ADSBbdd == null)			// singleton PATTERN
 			ADSBbdd= new DataDAOimpl();		// on instancie l'object que si il ne l'est pas deja 
-		
-		
+
+
 	}
 	public GET_ADSB(vue4d apt) {
 		super();
-		
+
 		this.vue4=apt;
 		if (ADSBbdd == null)			// singleton PATTERN
 			ADSBbdd= new DataDAOimpl();		// on instancie l'object que si il ne l'est pas deja 
-		
-		
+
+
 	}
 
-	
+
 	public void start()
 	{
-	        if ( task==null ) {
-				task = new TimerTask(){		
-					public void run(){
+		if ( task==null ) {
+			task = new TimerTask(){		
+				public void run(){
 
-						apt.getStart().setForeground(apt.noir);
-						apt.getStop().setForeground(apt.orange);
-						
-						apt.getConnexion().setForeground(apt.noir);
-						apt.getRecuperation().setForeground(apt.noir);
-						apt.getParse().setForeground(apt.noir);
-						apt.getAnalyse().setForeground(apt.noir);
-						apt.getRequete().setForeground(apt.noir);
-						apt.getSavestat().setForeground(apt.noir);
-						apt.getVerifierexp().setForeground(apt.noir);
-						apt.getAttente().setForeground(apt.noir);
-						
-						apt.getConnexion().setForeground(apt.orange);
-						HttpsURLConnection con=connexionFlux();
-						apt.getConnexion().setForeground(apt.vert);
-						
-						apt.getRecuperation().setForeground(apt.orange);
-						String input=recuperationDonnees(con);
-						apt.getRecuperation().setForeground(apt.vert);
-						
-						apt.getParse().setForeground(apt.orange);
-						ArrayList<DataStat> input_parse=parse_input(input);
-						apt.getParse().setForeground(apt.vert);
-						
-						
-						apt.getAnalyse().setForeground(apt.orange);
-						ArrayList<DataFull> tampon_sql=analyseDonnee(input_parse);
-						apt.getAnalyse().setForeground(apt.vert);
-						
-						apt.getRequete().setForeground(apt.orange);
-						ADSBbdd.create(tampon_sql);
-						apt.getRequete().setForeground(apt.vert);
+					apt.getStart().setForeground(apt.noir);
+					apt.getStop().setForeground(apt.orange);
 
-						apt.getSavestat().setForeground(apt.orange);
-						write_stat();
-						apt.getSavestat().setForeground(apt.vert);
-						
-						apt.getVerifierexp().setForeground(apt.orange);
-						verfierExpiration();
-						apt.getVerifierexp().setForeground(apt.vert);
-						
-						
-						
-						apt.getAttente().setForeground(apt.vert);
-						
+					apt.getConnexion().setForeground(apt.noir);
+					apt.getRecuperation().setForeground(apt.noir);
+					apt.getParse().setForeground(apt.noir);
+					apt.getAnalyse().setForeground(apt.noir);
+					apt.getRequete().setForeground(apt.noir);
+					apt.getSavestat().setForeground(apt.noir);
+					apt.getVerifierexp().setForeground(apt.noir);
+					apt.getAttente().setForeground(apt.noir);
 
-					}
-				};
-				super.scheduleAtFixedRate(task,new Date(),flux_periode*1000) ;}
+					apt.getConnexion().setForeground(apt.orange);
+					HttpsURLConnection con=connexionFlux();
+					apt.getConnexion().setForeground(apt.vert);
+
+					apt.getRecuperation().setForeground(apt.orange);
+					String input=recuperationDonnees(con);
+					apt.getRecuperation().setForeground(apt.vert);
+
+					apt.getParse().setForeground(apt.orange);
+					ArrayList<DataStat> input_parse=parse_input(input);
+					apt.getParse().setForeground(apt.vert);
+
+
+					apt.getAnalyse().setForeground(apt.orange);
+					ArrayList<DataFull> tampon_sql=analyseDonnee(input_parse);
+					apt.getAnalyse().setForeground(apt.vert);
+
+					apt.getRequete().setForeground(apt.orange);
+					ADSBbdd.create(tampon_sql);
+					apt.getRequete().setForeground(apt.vert);
+
+					apt.getSavestat().setForeground(apt.orange);
+					write_stat();
+					apt.getSavestat().setForeground(apt.vert);
+
+					apt.getVerifierexp().setForeground(apt.orange);
+					verfierExpiration();
+					apt.getVerifierexp().setForeground(apt.vert);
+
+
+
+					apt.getAttente().setForeground(apt.vert);
+
+
+				}
+			};
+			super.scheduleAtFixedRate(task,new Date(),flux_periode*1000) ;}
 	}
 
 	public void stop() {
@@ -140,13 +142,13 @@ public abstract  class GET_ADSB extends Timer{
 
 
 		URL url;
-		
+
 		try {
 			url=new URL(apt.getAdresseSource());;
 
 			HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
 			return con;
-					
+
 
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -180,7 +182,7 @@ public abstract  class GET_ADSB extends Timer{
 		if(con!=null){
 			try {
 				String input;
-				
+
 				BufferedReader br =	new BufferedReader(	new InputStreamReader(con.getInputStream()));
 
 				input=br.readLine();
@@ -196,7 +198,7 @@ public abstract  class GET_ADSB extends Timer{
 	}
 
 	protected abstract ArrayList<DataStat> parse_input (String input);
-	
+
 	private ArrayList<DataFull> analyseDonnee(ArrayList<DataStat> data) {
 
 		ArrayList<DataFull> Tamponsql =new ArrayList<DataFull>();
@@ -207,7 +209,7 @@ public abstract  class GET_ADSB extends Timer{
 		{
 			int j=0;
 			int n=ListeData.size();
-		
+
 			if (init==0) {
 
 				if (data.get(ptr_data).on_ground==false) {
@@ -271,18 +273,14 @@ public abstract  class GET_ADSB extends Timer{
 							compteurvalide++;
 							Tamponsql.add((DataFull)data.get(ptr_data));
 							ListeData.add(data.get(ptr_data));
-
 						}
 					}
 
 					j++;
 					n=ListeData.size();
-
 				}
 			}
 		}
-			
-		
 		return Tamponsql;
 	}
 
@@ -294,102 +292,124 @@ public abstract  class GET_ADSB extends Timer{
 
 
 
-	
+
 	private void write_stat()
 	{
-	if (frequence>=fich_periode)/// on vient ici toute les 30 * 10 s soit 300 s = 5 min
-	{
-		affichage();
-		frequence=0;
-		this.ecrireFichier(nomfic, ""+new Date()+";"+cpt+";"+compteurvalide+";"+compteurvol,false);
-	}
-
-	}
-
-private void affichage() {
-
-	System.out.println("time:" + new Date());
-	System.out.println("total="+cpt );
-	System.out.println("retenu="+ compteurvalide );
-	System.out.println("vols="+compteurvol);
-
-	apt.getSuivi().setText(apt.getSuivi().getText() + "\n" +  new Date()
-			+ " | " + "total=" + cpt + " | " +"retenu="+ compteurvalide +
-			" | "+ " vols="+compteurvol+
-			" | "+ " memoire="+ListeData.size()
-			);
-	apt.getScroller().revalidate();
-
-}
-
-public  void lireFichier(String nom)
-{
-	System.out.println("lire dans le fichier");
-	BufferedReader fe = null;
-	try{
-
-		fe = new BufferedReader(new FileReader(nom));
-
-		String tampon = fe.readLine();
-		while(tampon != null){
-			System.out.println(tampon);
-			tampon = fe.readLine();
+		if (frequence>=fich_periode)/// on vient ici toute les 30 * 10 s soit 300 s = 5 min
+		{
+			affichage();
+			frequence=0;
+			this.ecrireFichier(nomfic, ""+new Date()+";"+cpt+";"+compteurvalide+";"+compteurvol,false);
 		}
 
 	}
-	catch(IOException e)
-	{
-		e.printStackTrace();
+
+	private void affichage() {
+
+		System.out.println("time:" + new Date());
+		System.out.println("total="+cpt );
+		System.out.println("retenu="+ compteurvalide );
+		System.out.println("vols="+compteurvol);
+
+		apt.getSuivi().setText(apt.getSuivi().getText() + "\n" +  new Date()
+				+ " | " + "total=" + cpt + " | " +"retenu="+ compteurvalide +
+				" | "+ " vols="+compteurvol+
+				" | "+ " memoire="+ListeData.size()
+				);
+		apt.getScroller().revalidate();
+
 	}
-	finally{
-		try {
-			if(fe != null)
-			{
-				fe.close();
+
+	public  void lireFichier(String nom)
+	{
+		System.out.println("lire dans le fichier");
+		BufferedReader fe = null;
+		try{
+
+			fe = new BufferedReader(new FileReader(nom));
+
+			String tampon = fe.readLine();
+			while(tampon != null){
+				System.out.println(tampon);
+				tampon = fe.readLine();
 			}
-		} catch (IOException e) {
+
+		}
+		catch(IOException e)
+		{
 			e.printStackTrace();
 		}
-	}
-}
-
-public  void ecrireFichier(String nom,String donnee,boolean init){
-	System.out.println("ecriture dans un fichier");
-	BufferedWriter fs = null;
-	try{
-
-		fs = new BufferedWriter(new FileWriter(nom,!init)); // true pour ajouter 
-		fs.write(donnee, 0, donnee.length());
-		fs.newLine();
-		return;
-
-	}
-	catch(IOException e)
-	{
-		e.printStackTrace();
-	}
-	finally{
-		try {
-			if(fs != null)
-			{
-				fs.close();
+		finally{
+			try {
+				if(fe != null)
+				{
+					fe.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
-}
+
+	public  void ecrireFichier(String nom,String donnee,boolean init){
+		System.out.println("ecriture dans un fichier");
+		BufferedWriter fs = null;
+		try{
+
+			fs = new BufferedWriter(new FileWriter(nom,!init)); // true pour ajouter 
+			fs.write(donnee, 0, donnee.length());
+			fs.newLine();
+			return;
+
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				if(fs != null)
+				{
+					fs.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void requete4d()
+	{
+		String requetesql;
+		requetesql=ADSBbdd.request(vue4.getLongitude_lo().getText(), vue4.getLongitude_hi().getText(), vue4.getLatitude_lo().getText(), vue4.getLatitude_hi().getText(),
+				vue4.getAltitude_lo().getText(),vue4.getAltitude_hi().getText(),
+				vue4.getDate_lo().getText(),vue4.getDate_hi().getText(), false);
+		vue4.getTxtrApercu().setText(requetesql);
+		ArrayList<DataFull> donnee=ADSBbdd.findsql("SELECT * FROM `adsb` WHERE `longitude` BETWEEN"
+				+ " 1 AND 2 AND `latitude` BETWEEN 43 AND 44 AND `geo_altitude`BETWEEN 500 AND"
+				+ " 1800 AND `time_position` BETWEEN 152501399 AND 1525012679");
+		if (donnee.size()!=0)
+		{String tampon=donnee.get(0).headCsv();
+		for (int i = 0; i < donnee.size(); i++) {
+			DataFull ligne = donnee.get(i);
+			tampon=tampon+ligne.toCsv();
+		}
+		ecrireFichier(vue4.getTxtFichcsv().getText(), tampon,true);///Ecriture dans fichier avec creation
+		}
 
 
 
 
-public ArrayList<DataStat> getListeData() {
-	return ListeData;
-}
+	}
 
-public void setListeData(ArrayList<DataStat> listeData) {
-	ListeData = listeData;
-}
+	public ArrayList<DataStat> getListeData() {
+		return ListeData;
+	}
+
+	public void setListeData(ArrayList<DataStat> listeData) {
+		ListeData = listeData;
+	}
 
 
 
