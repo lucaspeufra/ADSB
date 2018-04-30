@@ -61,7 +61,6 @@ public class Controleur extends Timer implements ActionListener {
 		{
 			String inputValue = JOptionPane.showInputDialog("Donnez l'adresse de la BDD :");
 			apt.setAdresseBDD(inputValue);
-			if (!apt.getAdresseSource().isEmpty()) apt.getCharger().setForeground(apt.vert);
 		}
 		break;
 

@@ -12,6 +12,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.swing.JLabel;
 
 public abstract  class GET_ADSB extends Timer{
 
@@ -31,8 +32,8 @@ public abstract  class GET_ADSB extends Timer{
 
 	protected int init=0;						//Cette variable permet de savoir si c'est la premier connexion au flux
 
-	protected String nomfic="suivi.txt";		//Ici on precise le nom du fichier du suivi csv pour les stats
-	protected int fich_periode=1;			//ici on regle la periode a laquelle on va ecrire les stats dans le fichier ci dessus en seconde
+	protected String nomfic="suivi.csv";		//Ici on precise le nom du fichier du suivi csv pour les stats
+	protected int fich_periode=30;			//ici on regle la periode a laquelle on va ecrire les stats dans le fichier ci dessus en seconde
 
 
 
@@ -69,17 +70,50 @@ public abstract  class GET_ADSB extends Timer{
 				task = new TimerTask(){		
 					public void run(){
 
-						String input=recuperationDonnees(connexionFlux());
-					//	System.out.println(input);
+						apt.getStart().setForeground(apt.noir);
+						apt.getStop().setForeground(apt.orange);
+						
+						apt.getConnexion().setForeground(apt.noir);
+						apt.getRecuperation().setForeground(apt.noir);
+						apt.getParse().setForeground(apt.noir);
+						apt.getAnalyse().setForeground(apt.noir);
+						apt.getRequete().setForeground(apt.noir);
+						apt.getSavestat().setForeground(apt.noir);
+						apt.getVerifierexp().setForeground(apt.noir);
+						apt.getAttente().setForeground(apt.noir);
+						
+						apt.getConnexion().setForeground(apt.orange);
+						HttpsURLConnection con=connexionFlux();
+						apt.getConnexion().setForeground(apt.vert);
+						
+						apt.getRecuperation().setForeground(apt.orange);
+						String input=recuperationDonnees(con);
+						apt.getRecuperation().setForeground(apt.vert);
+						
+						apt.getParse().setForeground(apt.orange);
 						ArrayList<DataStat> input_parse=parse_input(input);
-					//	System.out.println(input_parse);
+						apt.getParse().setForeground(apt.vert);
+						
+						
+						apt.getAnalyse().setForeground(apt.orange);
 						ArrayList<DataFull> tampon_sql=analyseDonnee(input_parse);
-						// Ecriture dans la base de donnees
+						apt.getAnalyse().setForeground(apt.vert);
+						
+						apt.getRequete().setForeground(apt.orange);
 						ADSBbdd.create(tampon_sql);
 						apt.getRequete().setForeground(apt.vert);
 
+						apt.getSavestat().setForeground(apt.orange);
 						write_stat();
+						apt.getSavestat().setForeground(apt.vert);
+						
+						apt.getVerifierexp().setForeground(apt.orange);
 						verfierExpiration();
+						apt.getVerifierexp().setForeground(apt.vert);
+						
+						
+						
+						apt.getAttente().setForeground(apt.vert);
 						
 
 					}
@@ -91,6 +125,10 @@ public abstract  class GET_ADSB extends Timer{
 		if ( task!=null ) {
 			task.cancel();
 			task=null;
+
+			apt.getStart().setForeground(apt.vert);
+			apt.getStop().setForeground(apt.noir);
+
 		}
 	}
 
@@ -101,11 +139,6 @@ public abstract  class GET_ADSB extends Timer{
 	public HttpsURLConnection connexionFlux(){
 
 
-		apt.getConnexion().setForeground(apt.noir);
-		apt.getAnalyse().setForeground(apt.noir);
-		apt.getRequete().setForeground(apt.noir);
-		apt.getAttente().setForeground(apt.noir);
-		apt.getConnexion().setForeground(apt.orange);
 		URL url;
 		
 		try {
@@ -147,9 +180,7 @@ public abstract  class GET_ADSB extends Timer{
 		if(con!=null){
 			try {
 				String input;
-				apt.getConnexion().setForeground(apt.vert);
-				apt.getAnalyse().setForeground(apt.orange);
-
+				
 				BufferedReader br =	new BufferedReader(	new InputStreamReader(con.getInputStream()));
 
 				input=br.readLine();
@@ -192,6 +223,7 @@ public abstract  class GET_ADSB extends Timer{
 				compteurvalide++;
 				Tamponsql.add((DataFull)data.get(ptr_data));
 				init=1;
+				ecrireFichier(this.nomfic, "time;total;exploitable;vols;",true);/// initialisation du fichier de suivi stat
 			}
 
 			else {
@@ -272,7 +304,6 @@ public abstract  class GET_ADSB extends Timer{
 		this.ecrireFichier(nomfic, ""+new Date()+";"+cpt+";"+compteurvalide+";"+compteurvol,false);
 	}
 
-	apt.getAttente().setForeground(apt.vert);
 	}
 
 private void affichage() {

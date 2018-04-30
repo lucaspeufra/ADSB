@@ -27,7 +27,6 @@ public class Appli extends JFrame {
 	public Color vert = new Color(0,205,0);
 	
 	
-	//private ControleurMenu controleurMenu;
 	private Controleur controleur;
 	
 	
@@ -39,12 +38,18 @@ public class Appli extends JFrame {
 	private JButton stop;
 	
 	
-	private JLabel charger;
 	private JLabel connexion;
+	private JLabel recuperation;
+	private JLabel parse;
 	private JLabel analyse;
 	private JLabel requete;
+	private JLabel savestat;
+	private JLabel verifierexp;
 	private JLabel attente;
 
+		
+	
+	
 	
 	private JTextPane suivi;
 	private JScrollPane scroller;
@@ -57,7 +62,7 @@ public class Appli extends JFrame {
 	public Appli() {
 		super("PEUFRADSB");
 		
-		this.setPreferredSize(new Dimension(1300,200));
+		this.setPreferredSize(new Dimension(1300,400));
 		Get_adsb=new OSKY_impl(this);
 		controleur=new Controleur(this, Get_adsb);
 		
@@ -70,7 +75,7 @@ public class Appli extends JFrame {
 		creerMenu();
 
 		this.setAdresseSource("https://opensky-network.org/api/states/all");/// on met une adresse en memoire par defaut
-		
+		this.setAdresseBDD("jdbc:mysql://localhost:3306/ADSB?autoReconnect=true&useSSL=false");///adresse de bdd pardefaut
 		this.pack();
 		this.setVisible(true);
 	}
@@ -108,7 +113,7 @@ public class Appli extends JFrame {
 	private Component panelG() {
 		// TODO Auto-generated method stub
 		JPanel jp1=new JPanel();
-		jp1.setLayout(new GridLayout(6,1));
+		jp1.setLayout(new GridLayout(12,1));
 
 		
 		
@@ -116,31 +121,46 @@ public class Appli extends JFrame {
 		jpboutons.setLayout(new GridLayout(1,2));
 		
 		this.start=new JButton("Start");
-		//this.start.addActionListener(new ControleurBoutonStart(timer));
 		this.start.addActionListener(controleur);
 		start.setActionCommand("START");
+		start.setForeground(vert);
 		
 		this.stop=new JButton("Stop");
-	//	this.stop.addActionListener(new ControleurBoutonStop(timer));
 		this.stop.addActionListener(controleur);
 		stop.setActionCommand("STOP");
 		
 		jpboutons.add(this.start);
 		jpboutons.add(this.stop);
 		jp1.add(jpboutons);
+	
 		
-		this.charger=new JLabel("Charger Source et BDD");
-		this.charger.setForeground(orange);
-		jp1.add(this.charger);
+		
+		
+		
+		
 		
 		this.connexion=new JLabel("Connexion au flux");
 		jp1.add(this.connexion);
 		
+		this.recuperation=new JLabel("Recuperation des données");
+		jp1.add(this.recuperation);
+		
+		this.parse=new JLabel("Stockage données en memoire");
+		jp1.add(this.parse);
+
 		this.analyse=new JLabel("Analyse des données");
 		jp1.add(this.analyse);
 		
 		this.requete=new JLabel("Envoie de la requête SQL");
 		jp1.add(this.requete);
+		
+		this.savestat=new JLabel("Sauvegarder statistiques ");
+		jp1.add(this.savestat);
+		
+		this.verifierexp=new JLabel("Verifier expiration mémoire");
+		jp1.add(this.verifierexp);
+		
+		
 		
 		this.attente=new JLabel("Attente d'une nouvelle connexion");
 		jp1.add(this.attente);
@@ -157,7 +177,7 @@ public class Appli extends JFrame {
 		this.suivi=new JTextPane();
 		suivi.setText("Visualisation des statistiques");
 		this.scroller=new JScrollPane(suivi,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		this.scroller.setPreferredSize(new Dimension(530,140));
+		this.scroller.setPreferredSize(new Dimension(630,250));
 		jp1.add(this.scroller);
 		return jp1;
 	}
@@ -181,14 +201,7 @@ public class Appli extends JFrame {
 		this.adresseBDD = adresseBDD;
 	}
 
-	public JLabel getCharger() {
-		return charger;
-	}
-
-	public void setCharger(JLabel charger) {
-		this.charger = charger;
-	}
-
+	
 	public JLabel getConnexion() {
 		return connexion;
 	}
@@ -236,6 +249,78 @@ public class Appli extends JFrame {
 
 	public void setSuivi(JTextPane suivi) {
 		this.suivi = suivi;
+	}
+
+
+
+	public JButton getStart() {
+		return start;
+	}
+
+
+
+	public void setStart(JButton start) {
+		this.start = start;
+	}
+
+
+
+	public JButton getStop() {
+		return stop;
+	}
+
+
+
+	public void setStop(JButton stop) {
+		this.stop = stop;
+	}
+
+
+
+	public JLabel getRecuperation() {
+		return recuperation;
+	}
+
+
+
+	public void setRecuperation(JLabel recuperation) {
+		this.recuperation = recuperation;
+	}
+
+
+
+	public JLabel getParse() {
+		return parse;
+	}
+
+
+
+	public void setParse(JLabel parse) {
+		this.parse = parse;
+	}
+
+
+
+	public JLabel getSavestat() {
+		return savestat;
+	}
+
+
+
+	public void setSavestat(JLabel savestat) {
+		this.savestat = savestat;
+	}
+
+
+
+	public JLabel getVerifierexp() {
+		return verifierexp;
+	}
+
+
+
+	public void setVerifierexp(JLabel verifierexp) {
+		this.verifierexp = verifierexp;
 	}
 
 
