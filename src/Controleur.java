@@ -2,7 +2,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Timer;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class Controleur extends Timer implements ActionListener {

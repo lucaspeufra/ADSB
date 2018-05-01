@@ -120,8 +120,8 @@ public class REQUETE4D {
 		lblLatitude.setBounds(12, 51, 70, 15);
 		frame.getContentPane().add(lblLatitude);
 		
-		JLabel lblAltitude = new JLabel("Altitude");
-		lblAltitude.setBounds(12, 96, 70, 15);
+		JLabel lblAltitude = new JLabel("Baro altitude");
+		lblAltitude.setBounds(12, 96, 107, 15);
 		frame.getContentPane().add(lblAltitude);
 		
 		JLabel lblDate = new JLabel("Date");

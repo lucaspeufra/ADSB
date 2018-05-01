@@ -12,9 +12,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.swing.JLabel;
-
-import org.omg.IOP.TAG_MULTIPLE_COMPONENTS;
 
 public abstract  class GET_ADSB extends Timer{
 
@@ -32,10 +29,9 @@ public abstract  class GET_ADSB extends Timer{
 
 	public long flux_periode=10;			//ici on regle la periode a laquelle on se connecte au flux de donnees en seconde
 
-	protected int init=0;						//Cette variable permet de savoir si c'est la premier connexion au flux
 
 	protected String nomfic="suivi.csv";		//Ici on precise le nom du fichier du suivi csv pour les stats
-	protected int fich_periode=30;			//ici on regle la periode a laquelle on va ecrire les stats dans le fichier ci dessus en seconde
+	protected int fich_periode=1;			//ici on regle la periode a laquelle on va ecrire les stats dans le fichier ci dessus en seconde
 
 
 
@@ -52,6 +48,7 @@ public abstract  class GET_ADSB extends Timer{
 		this.apt=apt;
 		if (ADSBbdd == null)			// singleton PATTERN
 			ADSBbdd= new DataDAOimpl();		// on instancie l'object que si il ne l'est pas deja 
+		ecrireFichier(this.nomfic, "time;total;exploitable;vols;",true);/// initialisation du fichier de suivi stat
 
 
 	}
@@ -98,7 +95,14 @@ public abstract  class GET_ADSB extends Timer{
 
 
 					apt.getAnalyse().setForeground(apt.orange);
-					ArrayList<DataFull> tampon_sql=analyseDonnee(input_parse);
+					ArrayList<DataFull> tampon_sql;
+					if(ListeData.size()==0)
+						tampon_sql=	initialision_analyse(input_parse);
+					else	
+					{
+						comptagevol(input_parse);
+						tampon_sql=analyseDonnee(input_parse);
+					}
 					apt.getAnalyse().setForeground(apt.vert);
 
 					apt.getRequete().setForeground(apt.orange);
@@ -199,6 +203,88 @@ public abstract  class GET_ADSB extends Timer{
 
 	protected abstract ArrayList<DataStat> parse_input (String input);
 
+
+	private ArrayList<DataFull> initialision_analyse(ArrayList<DataStat> data)
+
+	{
+		ArrayList<DataFull> Tamponsql =new ArrayList<DataFull>();
+
+		int taille_input=data.size();
+		int ptr_data=0;
+		for (ptr_data=0;ptr_data < taille_input;ptr_data++)
+		{
+
+			if (data.get(ptr_data).on_ground==false) {
+
+				data.get(ptr_data).setaAjouter(false);
+				compteurvol++;
+
+			}
+
+			else data.get(ptr_data).setaAjouter(true);
+
+			ListeData.add(data.get(ptr_data));
+			compteurvalide++;
+			Tamponsql.add((DataFull)data.get(ptr_data));
+		}
+
+		return Tamponsql;
+	}
+
+
+	private void	comptagevol(ArrayList<DataStat> data)
+	{
+		int taille_input=data.size();
+		int ptr_data=0;
+		for (ptr_data=0;ptr_data < taille_input;ptr_data++)
+		{
+			int j=0;
+			int n=ListeData.size();
+			while (j<n)
+
+			{
+				if (ListeData.get(j).getIcao24().equals(data.get(ptr_data).getIcao24()))
+				{
+
+					if (ListeData.get(j).getLast_contact()!=data.get(ptr_data).getLast_contact())
+					{
+						if (ListeData.get(j).isaAjouter()==true && data.get(ptr_data).isOn_ground() ==false) 
+						{
+							data.get(ptr_data).setaAjouter(false);
+							compteurvol++;
+						}
+
+						else if (ListeData.get(j).isaAjouter()==false && data.get(ptr_data).isOn_ground()==true) 
+						{
+							data.get(ptr_data).setaAjouter(true);
+
+						}
+					}
+
+					j=n-1;
+
+				}
+				else if (j==n-1)
+				{
+
+					if (data.get(ptr_data).isOn_ground()==false)
+					{
+						data.get(ptr_data).setaAjouter(false);
+						compteurvol++;
+					}
+					else data.get(ptr_data).setaAjouter(true);
+				}
+
+				j++;
+				n=ListeData.size();
+			}
+		}
+
+
+	}
+
+
+
 	private ArrayList<DataFull> analyseDonnee(ArrayList<DataStat> data) {
 
 		ArrayList<DataFull> Tamponsql =new ArrayList<DataFull>();
@@ -209,84 +295,35 @@ public abstract  class GET_ADSB extends Timer{
 		{
 			int j=0;
 			int n=ListeData.size();
+			while (j<n)
 
-			if (init==0) {
+			{
 
-				if (data.get(ptr_data).on_ground==false) {
-
-					data.get(ptr_data).setaAjouter(false);
-					compteurvol++;
-
-				}
-
-				else data.get(ptr_data).setaAjouter(true);
-
-				ListeData.add(data.get(ptr_data));
-				compteurvalide++;
-				Tamponsql.add((DataFull)data.get(ptr_data));
-				init=1;
-				ecrireFichier(this.nomfic, "time;total;exploitable;vols;",true);/// initialisation du fichier de suivi stat
-			}
-
-			else {
-
-				while (j<n)
-
+				if (ListeData.get(j).getIcao24().equals(data.get(ptr_data).getIcao24()))
 				{
 
-					if (ListeData.get(j).getIcao24().equals(data.get(ptr_data).getIcao24()))
+					if (ListeData.get(j).getLast_contact()!=data.get(ptr_data).getLast_contact())
 					{
-
-						if (ListeData.get(j).getLast_contact()!=data.get(ptr_data).getLast_contact()) {
-
-
-							if (ListeData.get(j).isaAjouter()==true && data.get(ptr_data).isOn_ground() ==false) {
-								data.get(ptr_data).setaAjouter(false);
-								compteurvol++;
-							}
-
-							else {
-								if (ListeData.get(j).isaAjouter()==false && data.get(ptr_data).isOn_ground()==true) {
-									data.get(ptr_data).setaAjouter(true);
-								}
-							}
-
-
-							compteurvalide++;
-							Tamponsql.add((DataFull)data.get(ptr_data));
-							ListeData.add(data.get(ptr_data));
-							ListeData.remove(j);
-						}
-
-						j=n-1;
-
+						compteurvalide++;
+						Tamponsql.add((DataFull)data.get(ptr_data));
+						ListeData.add(data.get(ptr_data));
+						ListeData.remove(j);
 					}
-					else {
-
-						if (j==n-1) {
-
-							if (data.get(ptr_data).isOn_ground()==false) {
-								data.get(ptr_data).setaAjouter(false);
-								compteurvol++;
-							}
-							else data.get(ptr_data).setaAjouter(true);
-							compteurvalide++;
-							Tamponsql.add((DataFull)data.get(ptr_data));
-							ListeData.add(data.get(ptr_data));
-						}
-					}
-
-					j++;
-					n=ListeData.size();
+					j=n-1;
 				}
+				else if (j==n-1)
+				{
+
+					compteurvalide++;
+					Tamponsql.add((DataFull)data.get(ptr_data));
+					ListeData.add(data.get(ptr_data));
+				}
+				j++;
+				n=ListeData.size();
 			}
 		}
 		return Tamponsql;
 	}
-
-
-
-
 
 
 
@@ -312,9 +349,9 @@ public abstract  class GET_ADSB extends Timer{
 		System.out.println("vols="+compteurvol);
 
 		apt.getSuivi().setText(apt.getSuivi().getText() + "\n" +  new Date()
-				+ " | " + "total=" + cpt + " | " +"retenu="+ compteurvalide +
-				" | "+ " vols="+compteurvol+
-				" | "+ " memoire="+ListeData.size()
+		+ " | " + "total=" + cpt + " | " +"retenu="+ compteurvalide +
+		" | "+ " vols="+compteurvol+
+		" | "+ " memoire="+ListeData.size()
 				);
 		apt.getScroller().revalidate();
 
@@ -384,20 +421,28 @@ public abstract  class GET_ADSB extends Timer{
 		String requetesql;
 		requetesql=ADSBbdd.request(vue4.getLongitude_lo().getText(), vue4.getLongitude_hi().getText(), vue4.getLatitude_lo().getText(), vue4.getLatitude_hi().getText(),
 				vue4.getAltitude_lo().getText(),vue4.getAltitude_hi().getText(),
-				vue4.getDate_lo().getText(),vue4.getDate_hi().getText(), false);
-		vue4.getTxtrApercu().setText(requetesql);
-		ArrayList<DataFull> donnee=ADSBbdd.findsql("SELECT * FROM `adsb` WHERE `longitude` BETWEEN"
-				+ " 1 AND 2 AND `latitude` BETWEEN 43 AND 44 AND `geo_altitude`BETWEEN 500 AND"
-				+ " 1800 AND `time_position` BETWEEN 152501399 AND 1525012679");
+				vue4.getDate_lo().getText(),vue4.getDate_hi().getText(), vue4.getGeo_altitude().isSelected());
+		vue4.getTxtrApercu().setText("");
+		vue4.getTxtrApercu().append(requetesql);
+		
+		ArrayList<DataFull> donnee=ADSBbdd.findsql(requetesql+"\n");
+		
+		
 		if (donnee.size()!=0)
-		{String tampon=donnee.get(0).headCsv();
-		for (int i = 0; i < donnee.size(); i++) {
-			DataFull ligne = donnee.get(i);
-			tampon=tampon+ligne.toCsv();
-		}
+		{
+			String tampon=donnee.get(0).headCsv();
+			for (int i = 0; i < donnee.size(); i++)
+			{
+				DataFull ligne = donnee.get(i);
+				tampon=tampon+ligne.toCsv();
+			}
 		ecrireFichier(vue4.getTxtFichcsv().getText(), tampon,true);///Ecriture dans fichier avec creation
+		vue4.getTxtrApercu().append("\nnombre de ligne trouve="+donnee.size() +"\n"+"\n");
+		vue4.getTxtrApercu().append(tampon);
+		
+		
 		}
-
+		
 
 
 

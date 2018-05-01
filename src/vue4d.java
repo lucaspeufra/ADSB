@@ -29,7 +29,7 @@ public class vue4d extends JFrame {
 
 	private JTextArea txtrApercu;
 	
-	
+	private JCheckBox geo_altitude;
 	
 	private Controleur controleur;
 	
@@ -64,42 +64,42 @@ public class vue4d extends JFrame {
 		
 		
 
-		longitude_lo = new JTextField("longitude_lo");
-		longitude_lo.setBounds(114, 12, 114, 19);
+		longitude_lo = new JTextField("1");
+		longitude_lo.setBounds(124, 12, 114, 19);
 		this.getContentPane().add(longitude_lo);
 		longitude_lo.setColumns(10);
 		
-		longitude_hi = new JTextField("longitude_hi");
+		longitude_hi = new JTextField("2");
 		longitude_hi.setBounds(280, 12, 114, 19);
 		this.getContentPane().add(longitude_hi);
 		longitude_hi.setColumns(10);
 		
-		latitude_lo = new JTextField();
-		latitude_lo.setBounds(114, 49, 114, 19);
+		latitude_lo = new JTextField("43");
+		latitude_lo.setBounds(124, 49, 114, 19);
 		this.getContentPane().add(latitude_lo);
 		latitude_lo.setColumns(10);
 		
-		latitude_hi = new JTextField();
+		latitude_hi = new JTextField("44");
 		latitude_hi.setBounds(280, 49, 114, 19);
 		this.getContentPane().add(latitude_hi);
 		latitude_hi.setColumns(10);
 		
-		altitude_lo = new JTextField();
-		altitude_lo.setBounds(114, 94, 114, 19);
+		altitude_lo = new JTextField("500");
+		altitude_lo.setBounds(124, 94, 114, 19);
 		this.getContentPane().add(altitude_lo);
 		altitude_lo.setColumns(10);
 		
-		altitude_hi = new JTextField();
+		altitude_hi = new JTextField("1800");
 		altitude_hi.setBounds(280, 94, 114, 19);
 		this.getContentPane().add(altitude_hi);
 		altitude_hi.setColumns(10);
 		
-		Date_lo = new JTextField();
-		Date_lo.setBounds(114, 196, 114, 19);
+		Date_lo = new JTextField("152501399");
+		Date_lo.setBounds(124, 196, 114, 19);
 		this.getContentPane().add(Date_lo);
 		Date_lo.setColumns(10);
 		
-		Date_hi = new JTextField();
+		Date_hi = new JTextField("1525254400");
 		Date_hi.setBounds(280, 196, 114, 19);
 		this.getContentPane().add(Date_hi);
 		Date_hi.setColumns(10);
@@ -112,8 +112,8 @@ public class vue4d extends JFrame {
 		lblLatitude.setBounds(12, 51, 70, 15);
 		this.getContentPane().add(lblLatitude);
 		
-		JLabel lblAltitude = new JLabel("Altitude");
-		lblAltitude.setBounds(12, 96, 70, 15);
+		JLabel lblAltitude = new JLabel("Baro altitude");
+		lblAltitude.setBounds(12, 96, 107, 15);
 		this.getContentPane().add(lblAltitude);
 		
 		JLabel lblDate = new JLabel("Date");
@@ -125,12 +125,9 @@ public class vue4d extends JFrame {
 		txtrApercu.setBounds(12, 269, 426, 304);
 		this.getContentPane().add(txtrApercu);
 		
-		JCheckBox baro_altitude = new JCheckBox("Baro altitude");
-		baro_altitude.setBounds(28, 141, 129, 23);
-		this.getContentPane().add(baro_altitude);
 		
-		JCheckBox geo_altitude = new JCheckBox("Geo altitude");
-		geo_altitude.setBounds(190, 141, 129, 23);
+		geo_altitude = new JCheckBox("Geo altitude");
+		geo_altitude.setBounds(28, 141, 129, 23);
 		this.getContentPane().add(geo_altitude);
 		
 		JLabel lblNomFichier = new JLabel("Nom fichier");
@@ -143,6 +140,14 @@ public class vue4d extends JFrame {
 		this.getContentPane().add(txtFichcsv);
 		txtFichcsv.setColumns(10);
 
+	}
+
+	public JCheckBox getGeo_altitude() {
+		return geo_altitude;
+	}
+
+	public void setGeo_altitude(JCheckBox geo_altitude) {
+		this.geo_altitude = geo_altitude;
 	}
 
 	public JTextArea getTxtrApercu() {

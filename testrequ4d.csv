@@ -1,4 +1,0 @@
-icao24;callsign;origin_country;time_position;last_contact;longitude;latitude;geo_altitude;on_ground;velocity;heading;vertical_rate;baro_altitude;squawk;spi;position_source
-3455d9;VOE19TP;Spain;1523903570;1523903570;1.4726;43.5222;792.48;false;94.45;323.19;-4.88;868.68;0224;false;0
-4070cc;EZY176R;UnitedKingdom;1523903569;1523903570;1.6221;43.4452;1630.68;false;99.84;268.52;-6.83;1752.6;1000;false;0
-

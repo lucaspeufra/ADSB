@@ -80,6 +80,7 @@ public class OSKY_impl extends GET_ADSB{
 		apt.getAnalyse().setForeground(apt.vert);
 		apt.getRequete().setForeground(apt.orange);
 		frequence++;
+		scan1.close();
 		return input_liste;
 
 		
