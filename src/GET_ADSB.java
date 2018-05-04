@@ -13,7 +13,7 @@ import java.util.TimerTask;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public abstract  class GET_ADSB extends Timer{
+public   class GET_ADSB extends Timer{
 
 	protected TimerTask task;					//Objet de Tache periodique 
 
@@ -33,14 +33,26 @@ public abstract  class GET_ADSB extends Timer{
 	protected String nomfic="suivi.csv";		//Ici on precise le nom du fichier du suivi csv pour les stats
 	protected int fich_periode=1;			//ici on regle la periode a laquelle on va ecrire les stats dans le fichier ci dessus en seconde
 
-
+	protected double retbdd=0;
 
 	protected Appli apt;						// Classe de la Vu concerne
 	protected vue4d vue4;						// Classe de la Vu concerne
+	protected IParsingStrategy parsestrategy;
 
 
 
+	public GET_ADSB(Appli apt,IParsingStrategy parsestrategy) {
+		super();
 
+		ListeData = new ArrayList<DataStat>();;
+		this.apt=apt;
+		this.parsestrategy=parsestrategy;
+		if (ADSBbdd == null)			// singleton PATTERN
+			ADSBbdd= new DataDAOimpl();		// on instancie l'object que si il ne l'est pas deja 
+		ecrireFichier(this.nomfic, "time;total;exploitable;vols;memoire;retbdd",true);/// initialisation du fichier de suivi stat
+
+
+	}
 	public GET_ADSB(Appli apt) {
 		super();
 
@@ -48,7 +60,7 @@ public abstract  class GET_ADSB extends Timer{
 		this.apt=apt;
 		if (ADSBbdd == null)			// singleton PATTERN
 			ADSBbdd= new DataDAOimpl();		// on instancie l'object que si il ne l'est pas deja 
-		ecrireFichier(this.nomfic, "time;total;exploitable;vols;",true);/// initialisation du fichier de suivi stat
+		ecrireFichier(this.nomfic, "time;total;exploitable;vols;memoire;retbdd",true);/// initialisation du fichier de suivi stat
 
 
 	}
@@ -69,6 +81,8 @@ public abstract  class GET_ADSB extends Timer{
 			task = new TimerTask(){		
 				public void run(){
 
+					frequence++;
+					
 					apt.getStart().setForeground(apt.noir);
 					apt.getStop().setForeground(apt.orange);
 
@@ -90,9 +104,11 @@ public abstract  class GET_ADSB extends Timer{
 					apt.getRecuperation().setForeground(apt.vert);
 
 					apt.getParse().setForeground(apt.orange);
-					ArrayList<DataStat> input_parse=parse_input(input);
+					//ArrayList<DataStat> input_parse=parse_input(input);
+					ArrayList<DataStat> input_parse=parsestrategy.parse_input(input);
 					apt.getParse().setForeground(apt.vert);
-
+					
+					cpt=cpt+input_parse.size();
 
 					apt.getAnalyse().setForeground(apt.orange);
 					ArrayList<DataFull> tampon_sql;
@@ -106,7 +122,7 @@ public abstract  class GET_ADSB extends Timer{
 					apt.getAnalyse().setForeground(apt.vert);
 
 					apt.getRequete().setForeground(apt.orange);
-					ADSBbdd.create(tampon_sql);
+					retbdd=retbdd+ADSBbdd.create(tampon_sql);
 					apt.getRequete().setForeground(apt.vert);
 
 					apt.getSavestat().setForeground(apt.orange);
@@ -120,7 +136,7 @@ public abstract  class GET_ADSB extends Timer{
 
 
 					apt.getAttente().setForeground(apt.vert);
-
+					
 
 				}
 			};
@@ -201,7 +217,7 @@ public abstract  class GET_ADSB extends Timer{
 		return "";
 	}
 
-	protected abstract ArrayList<DataStat> parse_input (String input);
+	//protected abstract ArrayList<DataStat> parse_input (String input);
 
 
 	private ArrayList<DataFull> initialision_analyse(ArrayList<DataStat> data)
@@ -298,9 +314,11 @@ public abstract  class GET_ADSB extends Timer{
 			while (j<n)
 
 			{
-
+				
 				if (ListeData.get(j).getIcao24().equals(data.get(ptr_data).getIcao24()))
 				{
+					ListeData.get(j).setTTL(ListeData.get(j).getTTL()+1);
+					
 
 					if (ListeData.get(j).getLast_contact()!=data.get(ptr_data).getLast_contact())
 					{
@@ -318,6 +336,7 @@ public abstract  class GET_ADSB extends Timer{
 					Tamponsql.add((DataFull)data.get(ptr_data));
 					ListeData.add(data.get(ptr_data));
 				}
+				
 				j++;
 				n=ListeData.size();
 			}
@@ -336,7 +355,7 @@ public abstract  class GET_ADSB extends Timer{
 		{
 			affichage();
 			frequence=0;
-			this.ecrireFichier(nomfic, ""+new Date()+";"+cpt+";"+compteurvalide+";"+compteurvol,false);
+			this.ecrireFichier(nomfic, ""+new Date()+";"+cpt+";"+compteurvalide+";"+compteurvol+";"+ListeData.size()+";"+retbdd,false);
 		}
 
 	}
@@ -349,9 +368,11 @@ public abstract  class GET_ADSB extends Timer{
 		System.out.println("vols="+compteurvol);
 
 		apt.getSuivi().setText(apt.getSuivi().getText() + "\n" +  new Date()
-		+ " | " + "total=" + cpt + " | " +"retenu="+ compteurvalide +
-		" | "+ " vols="+compteurvol+
-		" | "+ " memoire="+ListeData.size()
+		+ "|" + "total=" + cpt + "|" +"retenu="+ compteurvalide +
+		"|"+ "vols="+compteurvol+
+		"|"+ "memoire="+ListeData.size()+
+		"|"+ "retbdd="+retbdd
+		
 				);
 		apt.getScroller().revalidate();
 

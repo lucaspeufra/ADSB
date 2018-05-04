@@ -1,0 +1,4 @@
+icao24;callsign;origin_country;time_position;last_contact;longitude;latitude;geo_altitude;on_ground;velocity;heading;vertical_rate;baro_altitude;squawk;spi;position_source
+4ca706;RYR3021;Ireland;1525370769;1525370769;1.4799;43.3565;1775.46;false;116.45;55.26;-2.93;1798.32;1000;false;0
+4ca706;RYR3021;Ireland;1525370780;1525370780;1.4931;43.3631;1729.74;false;115.02;55.39;-4.23;1760.22;1000;false;0
+

@@ -56,14 +56,15 @@ public class Appli extends JFrame {
 
 
 	
-	private OSKY_impl Get_adsb;
+	private GET_ADSB Get_adsb;
 
 
 	public Appli() {
 		super("PEUFRADSB");
 		
 		this.setPreferredSize(new Dimension(1300,400));
-		Get_adsb=new OSKY_impl(this);
+		IParsingStrategy strategy=new ParseOSKY();
+		Get_adsb=new GET_ADSB(this,strategy);
 		controleur=new Controleur(this, Get_adsb);
 		
 		

@@ -29,17 +29,19 @@ public class DataDAOimpl extends DataDAO  {
 		fermerConnect(connexion);
 	}
 
-	public void create(ArrayList<DataFull> Tamponsql) {
+	public int create(ArrayList<DataFull> Tamponsql) {
 		// TODO Auto-generated method stub
 		String sql="";
 		Connection connexion = connect();
 		java.sql.Statement stmt;
+		int ret=0;
 		try {
 			if(Tamponsql.size()>0)  ///;on ecrit que si il y a qq chose dans liste
 			{
 				stmt = connexion.createStatement();
 				sql = this.requete_creer_list(Tamponsql);
-				stmt.executeUpdate(sql);// On execute la requete avec update
+				ret=stmt.executeUpdate(sql);// On execute la requete avec update
+			//	System.out.println("--"+(Tamponsql.size()-ret)+"--\n");
 				stmt.close();
 			}
 
@@ -51,6 +53,8 @@ public class DataDAOimpl extends DataDAO  {
 			e.printStackTrace();
 		}
 		fermerConnect(connexion);
+		return Tamponsql.size()-ret;
+		
 	}
 
 	public String request(String longi_lo,String longi_hi,String lati_lo,String lati_hi,String alti_lo,String alti_hi,String date_lo,String date_hi,boolean type_alti) 
@@ -131,7 +135,7 @@ public class DataDAOimpl extends DataDAO  {
 						Float.parseFloat(data[7]),Boolean.valueOf(data[8]),Float.parseFloat(data[9]),
 						Float.parseFloat(data[10]),Float.parseFloat(data[11]),Float.parseFloat(data[12]),
 						data[13],Boolean.valueOf(data[14]),Integer.parseInt(data[15]));
-			//	System.out.println(adsb);
+				//	System.out.println(adsb);
 				listePersonne.add(adsb);
 			}
 			rs.close();

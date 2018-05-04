@@ -5,11 +5,9 @@ import java.util.Timer;
 import javax.swing.JOptionPane;
 
 public class Controleur extends Timer implements ActionListener {
-	//private MonTimer timer;
 	private Appli apt;	
 	private GET_ADSB traitement;
-	//private vue4d vue4;	
-	
+
 	public Controleur(Appli apt, GET_ADSB traitement) {
 		super();
 		this.apt = apt;

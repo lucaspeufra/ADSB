@@ -31,19 +31,19 @@ public class vue4d extends JFrame {
 	
 	private JCheckBox geo_altitude;
 	
-	private Controleur controleur;
+	//private Controleur controleur;
 	
 	
 	
-	private OSKY_impl Get_adsb;
+	private GET_ADSB Get_adsb;
 
 
 	public vue4d() {
 		super("PEUFRADSB");
 		
 		this.setPreferredSize(new Dimension(450,600));
-		Get_adsb=new OSKY_impl(this);
-		controleur=new Controleur( Get_adsb);
+		Get_adsb=new GET_ADSB(this);
+//		controleur=new Controleur( Get_adsb);
 		initialize();
 		this.pack();
 		this.setVisible(true);
@@ -56,7 +56,7 @@ public class vue4d extends JFrame {
 		
 		JButton btnEnvoyer = new JButton("Envoyer");
 		btnEnvoyer.setActionCommand("4D");
-		btnEnvoyer.addActionListener(controleur);
+		btnEnvoyer.addActionListener(new Controleur( Get_adsb));
 		
 				
 		btnEnvoyer.setBounds(294, 232, 117, 25);

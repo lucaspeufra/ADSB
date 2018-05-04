@@ -1,26 +1,12 @@
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class OSKY_impl extends GET_ADSB{
-	
+public class ParseOSKY implements IParsingStrategy{
 
-	public OSKY_impl(Appli apt) {
-		super(apt);
-		// TODO Auto-generated constructor stub
-	}
-
-
-	public OSKY_impl(vue4d apt) {
-		super(apt);
-		// TODO Auto-generated constructor stub
-	}
-
-	
 	@Override
-	protected ArrayList<DataStat> parse_input(String input) {
+	public ArrayList<DataStat> parse_input(String input) {
 		// TODO Auto-generated method stub
-		Scanner scan1;
+	Scanner scan1;
 		
 		ArrayList<DataStat> input_liste= new ArrayList<DataStat>();
 		input=input.replace("[","");
@@ -37,12 +23,9 @@ public class OSKY_impl extends GET_ADSB{
 		scan1.reset();
 		scan1.useDelimiter("],");
 		
-		apt.getConnexion().setForeground(new Color(0,205,0));
-
 
 		while(scan1.hasNext())	{
 
-			cpt++;
 
 
 			String ligne =scan1.next();
@@ -77,16 +60,11 @@ public class OSKY_impl extends GET_ADSB{
 			input_liste.add(adsb);
 
 		}
-		apt.getAnalyse().setForeground(apt.vert);
-		apt.getRequete().setForeground(apt.orange);
-		frequence++;
 		scan1.close();
 		return input_liste;
 
-		
-		
-	}
 
+	}
 	
 
 }
