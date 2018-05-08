@@ -4,22 +4,54 @@ import java.util.Timer;
 
 import javax.swing.JOptionPane;
 
+
+/**
+ * Cette classe est la partie "controleur" du modèle MVC. Elle gère les
+ * actions des deux fenêtres.
+ * 
+ * @author lucas
+ * 
+ *
+ */
+
 public class Controleur extends Timer implements ActionListener {
+	
+	/**
+	 * L'instance de la classe "vue" Appli
+	 */
 	private Appli apt;	
+	/**
+	 * L'instance de la classe qui récupère les données ADSB
+	 */
 	private GET_ADSB traitement;
 
+	/**
+	 * Constructeur pour l'application de traitement.
+	 * @param apt
+	 * @param traitement
+	 */
 	public Controleur(Appli apt, GET_ADSB traitement) {
 		super();
 		this.apt = apt;
 		this.traitement = traitement;
 	}
 
-	public Controleur( GET_ADSB traitement) {
+	/**
+	 * Constructeur pour l'application de requêtes.
+	 * @param traitement
+	 */
+	public Controleur(GET_ADSB traitement) {
 		super();
-		//this.vue4 = apt;
 		this.traitement = traitement;
 	}
 
+
+	/**
+	 * La méthode qui gère les changements d'état sur les boutons de menu
+	 * ainsi que sur les boutons start, stop et 4d
+	 * Chaque commande est associée à une méthode de la classe GET_ADSB 
+	 * qui mettra à jour la vue
+	 */
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 

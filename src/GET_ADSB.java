@@ -13,30 +13,81 @@ import java.util.TimerTask;
 
 import javax.net.ssl.HttpsURLConnection;
 
+/**
+ * Cette classe effectue la majeure partie du traitement : connexion au flux,
+ *  récupération des données, analyse, création de la liste de données
+ *  qui sera envoyé à la bdd. Elle hérite de la classe Timer pour que 
+ *  les données soient récupérées à un intervalle de temps régulier
+ * @author lucas
+ *
+ */
 public   class GET_ADSB extends Timer{
 
+	/**
+	 * tâche qui automatise la récupération des données toutes les 10sec
+	 */
 	protected TimerTask task;					//Objet de Tache periodique 
 
+	/**
+	 * liste de données servant à la gestion des redondances et 
+	 * aux statistiques
+	 */
 	protected ArrayList<DataStat> ListeData ;	//Memoire du logiciel permettand de faire les stats (vol..etc) et le filtrage des donnees redondantes
+	/**
+	 * instance de la classe DataDAOimpl qui gère les accès à la bdd
+	 */
 	protected static DataDAOimpl ADSBbdd;     // reference a l'object de communication a la base de donnee (Modele singleton )
 
-
+	/**
+	 * compte le nombre total de données récupérées 
+	 */
 	protected long cpt=0;				//Ce compteur compte le nombre de donnees total recupere par l'objet
+	/**
+	 * compte le nombre de données non redondantes
+	 */
 	protected long compteurvalide=0;	//Ce compteur compte le nombre de donnne non redondantes 
+	/**
+	 * compte le nombre de vols
+	 */
 	protected long compteurvol=0;		//Ce compteur compte le nombre de vols
 
+	/**
+	 * nombre d'accès au flux entre deux écritures dans le fichier 
+	 * de statistiques
+	 */
 	protected int frequence=30;				//variable de comptage du temps à la seconde
 
+	/**
+	 * temps en secondes entre deux connections au flux
+	 */
 	public long flux_periode=10;			//ici on regle la periode a laquelle on se connecte au flux de donnees en seconde
 
-
+	/**
+	 * fichier dans lequel sont écrites les statistiques
+	 */
 	protected String nomfic="suivi.csv";		//Ici on precise le nom du fichier du suivi csv pour les stats
+	/**
+	 * période en secondes à laquelle on écrit un rapport des statistiques
+	 */
 	protected int fich_periode=1;			//ici on regle la periode a laquelle on va ecrire les stats dans le fichier ci dessus en seconde
 
+	/**
+	 * compteur du nombre de données stockées dans la bdd
+	 */
 	protected double retbdd=0;
 
+	/**
+	 * instance de la vue d'analyse
+	 */
 	protected Appli apt;						// Classe de la Vu concerne
+	/**
+	 * instance de la vue de requête
+	 */
 	protected vue4d vue4;						// Classe de la Vu concerne
+	/**
+	 * stratégie qui décide des bons séparateurs pour les données reçues 
+	 * en fonction de la source
+	 */
 	protected IParsingStrategy parsestrategy;
 
 
@@ -75,6 +126,11 @@ public   class GET_ADSB extends Timer{
 	}
 
 
+	/**
+	 * méthode qui s'éffectue à chaque clic sur le bouton start
+	 * elle change les différentes couleurs des étapes et lance 
+	 * les méthodes associées
+	 */
 	public void start()
 	{
 		if ( task==null ) {
@@ -142,7 +198,11 @@ public   class GET_ADSB extends Timer{
 			};
 			super.scheduleAtFixedRate(task,new Date(),flux_periode*1000) ;}
 	}
-
+	
+	
+	/**
+	 * méthode qui s'effectue à chaque clic sur le bouton stop
+	 */
 	public void stop() {
 		if ( task!=null ) {
 			task.cancel();
@@ -157,7 +217,10 @@ public   class GET_ADSB extends Timer{
 
 
 
-
+	/**
+	 * méthode où la connection au flux s'effectue
+	 * @return la connection, et une exception si problème
+	 */
 	public HttpsURLConnection connexionFlux(){
 
 
@@ -179,6 +242,10 @@ public   class GET_ADSB extends Timer{
 
 	}
 
+	/**
+	 * méthode qui vérifie que les données de la liste ListeData ne sont
+	 *  pas obsolètes
+	 */
 	private  void verfierExpiration()
 	{
 		int i,j;
@@ -198,6 +265,11 @@ public   class GET_ADSB extends Timer{
 	}
 
 
+	/**
+	 * méthode qui récupère les données non séparées dans un buffer
+	 * @param con
+	 * @return le buffer de données brutes reçues
+	 */
 	private String recuperationDonnees(HttpsURLConnection con){
 		if(con!=null){
 			try {
@@ -219,7 +291,12 @@ public   class GET_ADSB extends Timer{
 
 	//protected abstract ArrayList<DataStat> parse_input (String input);
 
-
+	/**
+	 * méthode appelée seulement lors de la première connection
+	 * elle stocke toutes les données sans faire de comparaisons
+	 * @param data
+	 * @return la liste de données pour la bdd
+	 */
 	private ArrayList<DataFull> initialision_analyse(ArrayList<DataStat> data)
 
 	{
@@ -247,7 +324,11 @@ public   class GET_ADSB extends Timer{
 		return Tamponsql;
 	}
 
-
+	/**
+	 * méthode qui compte le nombre de vols en utilisant le champ
+	 * "on_ground" et le booléen "aAjouter"
+	 * @param data la liste de données réduites
+	 */
 	private void	comptagevol(ArrayList<DataStat> data)
 	{
 		int taille_input=data.size();
@@ -300,7 +381,12 @@ public   class GET_ADSB extends Timer{
 	}
 
 
-
+	/**
+	 * méthode qui gère les redondances, la mise à jour du ttl et 
+	 * la constitution de la liste de données pour la bdd
+	 * @param data la liste de données réduites
+	 * @return la liste de données pour la bdd
+	 */
 	private ArrayList<DataFull> analyseDonnee(ArrayList<DataStat> data) {
 
 		ArrayList<DataFull> Tamponsql =new ArrayList<DataFull>();
@@ -348,7 +434,10 @@ public   class GET_ADSB extends Timer{
 
 
 
-
+	/** 
+	 * méthode qui détermine si les statistiques doivent être écrites dans 
+	 * le fichier et à l'écran
+	 */
 	private void write_stat()
 	{
 		if (frequence>=fich_periode)/// on vient ici toute les 30 * 10 s soit 300 s = 5 min
@@ -360,6 +449,9 @@ public   class GET_ADSB extends Timer{
 
 	}
 
+	/**
+	 * méthode appelée pour l'affichage des statistiques à l'écran
+	 */
 	private void affichage() {
 
 		System.out.println("time:" + new Date());
@@ -378,6 +470,10 @@ public   class GET_ADSB extends Timer{
 
 	}
 
+	/**
+	 * méthode qui lit le fichier de statistiques
+	 * @param nom
+	 */
 	public  void lireFichier(String nom)
 	{
 		System.out.println("lire dans le fichier");
@@ -409,6 +505,13 @@ public   class GET_ADSB extends Timer{
 		}
 	}
 
+	/**
+	 * méthode qui écrit dans le fichier de statistiques
+	 * @param nom nom du fichier
+	 * @param donnee les statistiques à écrire
+	 * @param init booléen quifait la différence entre la création du 
+	 * fichier pour l'initialisation et l'écriture
+	 */
 	public  void ecrireFichier(String nom,String donnee,boolean init){
 		System.out.println("ecriture dans un fichier");
 		BufferedWriter fs = null;
@@ -436,7 +539,10 @@ public   class GET_ADSB extends Timer{
 		}
 	}
 
-
+	/**
+	 * méthode qui met en forme les requêtes 4D et stocke la réponse 
+	 * dans un fichier csv
+	 */
 	public void requete4d()
 	{
 		String requetesql;

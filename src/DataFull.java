@@ -1,3 +1,9 @@
+/**
+ * Chaque donnée ADS-B stockée est une instance de cette classe
+ * @author lucas
+ *
+ */
+
 public class DataFull {
 
 	protected String icao24;
@@ -115,6 +121,7 @@ public class DataFull {
 	public void setPosition_source(int position_source) {
 		this.position_source = position_source;
 	}
+	
 	@Override
 	public String toString() {
 		return "DataFull [icao24=" + icao24 + ", callsign=" + callsign + ", origin_country=" + origin_country
@@ -124,7 +131,10 @@ public class DataFull {
 				+ ", baro_altitude=" + baro_altitude + ", squawk=" + squawk + ", spi=" + spi + ", position_source="
 				+ position_source + "]";
 	}
-	
+	/**
+	 * Méthode qui génère un string directement formaté pour la bdd
+	 * @return la ligne correspondant à la donnée qui sera envoyée à la bdd
+	 */
 	public String toCsv() {
 		return  icao24 + ";" + callsign +";" + origin_country
 				+ ";"+ time_position + ";" + last_contact + ";" + longitude +";"+ latitude 
@@ -134,6 +144,10 @@ public class DataFull {
 				+ position_source + "\n";
 	}
 	
+	/**
+	 * Méthode qui crée l'en-tête du fichier csv
+	 * @return un string pour l'en-tête fichier csv
+	 */
 	public String headCsv()
 	{
 		return "icao24;callsign;origin_country;time_position;last_contact;longitude;"

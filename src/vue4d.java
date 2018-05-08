@@ -7,6 +7,11 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+/**
+ * Classe qui construit la fenêtre pour les requêtes 4D.
+ * @author lucas
+ *
+ */
 public class vue4d extends JFrame {
 
 	/**
@@ -25,16 +30,26 @@ public class vue4d extends JFrame {
 	private JTextField Date_lo;
 	private JTextField Date_hi;
 
+	/**
+	 * Nom du fichier CSV de sortie
+	 */
 	private JTextField txtFichcsv;
 
+	/**
+	 * Visualisation du résultat.
+	 */
 	private JTextArea txtrApercu;
 	
+	/**
+	 * Choix si on sélectionne la géo_altitude, la baro_altitude 
+	 * est choisie par défaut.
+	 */
 	private JCheckBox geo_altitude;
 	
-	//private Controleur controleur;
 	
-	
-	
+	/**
+	 * Instance de la classe de récupération de données.
+	 */
 	private GET_ADSB Get_adsb;
 
 
@@ -49,6 +64,10 @@ public class vue4d extends JFrame {
 		this.setVisible(true);
 	}
 	
+	/**
+	 * Méthode qui construit la partie graphique de l'application et 
+	 * met en place l'ActionListener du bouton "Envoyer"
+	 */
 	private void initialize() {
 		//this.setBounds(100, 100, 1300, 1600);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

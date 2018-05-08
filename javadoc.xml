@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="private" author="false" classpath="." destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" source="1.8" sourcefiles="src/DataStat.java,src/vue4d.java,src/TestMain.java,src/DataFull.java,src/GET_ADSB.java,src/Controleur.java,src/Appli.java,src/DataDAO.java,src/IParsingStrategy.java,src/DataDAOimpl.java,src/ParseOSKY.java,src/ParseFR24.java" sourcepath="src" splitindex="true" use="true" version="true"/>
+    </target>
+</project>

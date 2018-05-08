@@ -1,4 +1,5 @@
 import java.awt.Color;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -14,19 +15,31 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
+/**
+ * La classe "vue" du modèle MVC correspondant à la fenetre de traitement
+ */
+
 public class Appli extends JFrame {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
-	
+	/**
+	 * couleur noir pour les tâches non effectuées
+	 */
 	public Color noir = new Color(0,0,0);
+	/**
+	 * couleur orange pour les tâches en cours
+	 */
 	public Color orange = new Color(255,69,0);
+	/**
+	 * couleur vert pour les tâches terminées
+	 */
 	public Color vert = new Color(0,205,0);
 	
-	
+	/**
+	 * Instance du controleur
+	 */
 	private Controleur controleur;
 	
 	
@@ -37,28 +50,58 @@ public class Appli extends JFrame {
 	private JButton start;
 	private JButton stop;
 	
-	
+	/**
+	 * étape 1
+	 */
 	private JLabel connexion;
+	/**
+	 * étape 2
+	 */
 	private JLabel recuperation;
+	/**
+	 * étape 3
+	 */
 	private JLabel parse;
+	/**
+	 * étape 4
+	 */
 	private JLabel analyse;
-	private JLabel requete;
-	private JLabel savestat;
-	private JLabel verifierexp;
+	/**
+	 * étape 5
+	 */
+	private JLabel requete;	
+	/**
+	 * étape 6
+	 */
+	private JLabel savestat;	
+	/**
+	 * étape 7
+	 */
+	private JLabel verifierexp;	
+	/**
+	 * étape 8
+	 */
 	private JLabel attente;
 
 		
 	
 	
-	
+	/**
+	 * zone de texte où s'affiche le suivi de la recuperation
+	 */
 	private JTextPane suivi;
+	/**
+	 * scroller qui contient la zone de texte
+	 */
 	private JScrollPane scroller;
 
 
-	
+	/**
+	 * instance de la classe de récupération
+	 */
 	private GET_ADSB Get_adsb;
 
-
+	
 	public Appli() {
 		super("PEUFRADSB");
 		
@@ -82,7 +125,9 @@ public class Appli extends JFrame {
 	}
 
 
-
+	/**
+	 * Cette méthode crée le menu
+	 */
 	private void creerMenu() {
 		// TODO Auto-generated method stub
 		JMenuBar jmb=new JMenuBar();
@@ -110,7 +155,11 @@ public class Appli extends JFrame {
 
 
 
-
+	/**
+	 * Cette méthode crée le panel de gauche avec les boutons start/stop
+	 * ainsi que les étapes
+	 * @return la partie gauche du visuel de l'application
+	 */
 	private Component panelG() {
 		// TODO Auto-generated method stub
 		JPanel jp1=new JPanel();
@@ -171,7 +220,10 @@ public class Appli extends JFrame {
 	}
 
 	
-	
+	/**
+	 * Cette méthode crée le panel de droite avec la zone de texte
+	 * @return la partie droite du visuel de l'application
+	 */
 	private Component panelD() {
 		// TODO Auto-generated method stub
 		JPanel jp1=new JPanel();

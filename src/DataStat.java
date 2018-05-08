@@ -1,7 +1,23 @@
-
+/**
+ * Cette classe sert à l'analyse des données (redondance) et au comptage.
+ * Elle hérite de la classe DataFull
+ *
+ * @author lucas
+ *
+ */
 
 public class DataStat extends DataFull{
+	/**
+	 * booléen qui associé au champ "on_ground" permet de compter les vols
+	 */
 	protected boolean aAjouter;
+	/**
+	 * Durée de vie de la donnée ; elle est décrémentée à chaque fois 
+	 * que la donnée du tampon est utilisée pour l'analyse, à condition 
+	 * qu'elle ne soit pas redondante par rapport au nouveau flux entrant ; 
+	 * elle sert à déterminer le temps au bout duquel le vol a peu de chances 
+	 * de réapparaitre et peut donc être supprimé du tampon.
+	 */
 	protected double TTL = 30; /// temps d'expiration avant d etre flusher de la table
 
 	public DataStat(String icao24, String callsign, String origin_country, int time_position, int last_contact,

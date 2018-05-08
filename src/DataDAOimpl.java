@@ -7,28 +7,24 @@ import java.util.ArrayList;
 
 
 
-
+/**
+ * Classe qui hérite de la classe DataDAO et qui définit ses méthodes 
+ * abstraites pour notre table de données.
+ * 
+ * @author lucas
+ *
+ */
 public class DataDAOimpl extends DataDAO  {
+	
+	
 
-	@Override
-	public void create(DataFull p) {
-		// TODO Auto-generated method stub
-		String sql;
-		Connection connexion = connect();
-		java.sql.Statement stmt;
-		try {
-			stmt = connexion.createStatement();
-			sql = this.requete_creer(p);
-			int toto=stmt.executeUpdate(sql);// On execute la requete avec update
-			System.out.println("-"+toto+"--");
-			stmt.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fermerConnect(connexion);
-	}
-
+	/**
+	 * Méthode qui envoie la requête d'insertion de la liste de données
+	 * dans la table.
+	 * @param Tamponsql La liste de données à stocker.
+	 * @return Le nombre de données redondantes trouvées par la BDD 
+	 * pour vérifier qu'il est à 0 et que notre algorithme fonctionne.
+	 */
 	public int create(ArrayList<DataFull> Tamponsql) {
 		// TODO Auto-generated method stub
 		String sql="";
@@ -57,6 +53,20 @@ public class DataDAOimpl extends DataDAO  {
 		
 	}
 
+	
+	/**
+	 * Méthode qui crée la requête 4D demandée par l'utilisateur.
+	 * @param longi_lo
+	 * @param longi_hi
+	 * @param lati_lo
+	 * @param lati_hi
+	 * @param alti_lo
+	 * @param alti_hi
+	 * @param date_lo
+	 * @param date_hi
+	 * @param type_alti
+	 * @return La requête sous forme de String.
+	 */
 	public String request(String longi_lo,String longi_hi,String lati_lo,String lati_hi,String alti_lo,String alti_hi,String date_lo,String date_hi,boolean type_alti) 
 	{
 		String out;
@@ -85,10 +95,14 @@ public class DataDAOimpl extends DataDAO  {
 
 
 
-
-
+	
+	/**
+	 * Méthode qui envoie la requête 4D et qui retourne la réponse.
+	 * @param sql La requête SQL.
+	 * @return La liste des données qui correspondent à la requête.
+	 */
 	public ArrayList<DataFull> findsql(String sql) {
-		ArrayList<DataFull> listePersonne = new ArrayList<DataFull>();
+		ArrayList<DataFull> listeData = new ArrayList<DataFull>();
 
 		Connection connexion = connect();
 		java.sql.Statement stmt;
@@ -136,7 +150,7 @@ public class DataDAOimpl extends DataDAO  {
 						Float.parseFloat(data[10]),Float.parseFloat(data[11]),Float.parseFloat(data[12]),
 						data[13],Boolean.valueOf(data[14]),Integer.parseInt(data[15]));
 				//	System.out.println(adsb);
-				listePersonne.add(adsb);
+				listeData.add(adsb);
 			}
 			rs.close();
 			stmt.close();
@@ -146,112 +160,34 @@ public class DataDAOimpl extends DataDAO  {
 			e.printStackTrace();
 		}
 		fermerConnect(connexion);
-		return listePersonne;
+		return listeData;
 	}
 
 
 
 	@Override
 	public ArrayList<DataFull> findAll() {
-		ArrayList<DataFull> listePersonne = new ArrayList<DataFull>();
-		String sql;
-		Connection connexion = connect();
-		java.sql.Statement stmt;
-		ResultSet rs;
-		try {
-			stmt = connexion.createStatement();
-			sql = "SELECT * FROM Personne";
-			rs = stmt.executeQuery(sql);
-			DataFull personne;
-			while (rs.next()) {
-				// Retrieve by column name
-				String idPersonne = rs.getString("idPersonne");
-				String nom = rs.getString("nom");
-				String prenom = rs.getString("prenom");
-				personne = new DataFull(idPersonne, nom, prenom, 0, 0, 0, 0, 0, false, 0, 0, 0, 0, prenom, false, 0);
-				listePersonne.add(personne);
-			}
-			rs.close();
-			stmt.close();
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fermerConnect(connexion);
-		return listePersonne;
+		return null;
 	}
 
 	@Override
-	public DataFull find(String idPersonne) {
-		DataFull personne = null;
-		String sql;
-		Connection connexion = connect();
-		java.sql.Statement stmt;
-		ResultSet rs;
-		try {
-			stmt = connexion.createStatement();
-			sql = "SELECT * FROM Personne WHERE idPersonne = '"+ idPersonne +"'";
-			rs = stmt.executeQuery(sql);
-			while (rs.next()) {
-				// Retrieve by column name
-				String nom = rs.getString("nom");
-				String prenom = rs.getString("prenom");
-				personne = new DataFull(idPersonne, nom, prenom, 0, 0, 0, 0, 0, false, 0, 0, 0, 0, prenom, false, 0);
-			}
-			rs.close();
-			stmt.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fermerConnect(connexion);
-		return personne;
+	public DataFull find(String icao) {
+		return null;
 	}
 
 	@Override
 	public void update(DataFull p) {
-		//	String sql;
-		Connection connexion = connect();
-		java.sql.Statement stmt;
-		//String idPersonne = p.
-		//String nom = p.getNom();
-		//String prenom = p.getPrenom();
-		try {
-			stmt = connexion.createStatement();
-			//			sql = " UPDATE Personne SET nom='" + nom + "', prenom='" + prenom
-			//					+ "' WHERE IdPersonne= '" + idPersonne+ "'";
-			//	stmt.executeUpdate(sql);// On execute la requete avec update
-			stmt.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fermerConnect(connexion);
 	}
 
 	@Override
 	public void delete(DataFull p) {
-
-		// TODO Auto-generated method stub
-		//	String sql;
-		Connection connexion = connect();
-		java.sql.Statement stmt;
-		//	String idPersonne = p.getIdPersonne();
-		//	String nom = p.getNom();
-		//	String prenom = p.getPrenom();
-		try {
-			stmt = connexion.createStatement();
-			//			sql =  "DELETE FROM Personne WHERE Personne.IdPersonne = '" + idPersonne+"'";
-			//stmt.executeUpdate(sql);// On execute la requete avec update
-			stmt.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fermerConnect(connexion);
 	}
 
+	/**
+	 * Méthode qui crée la requête pour envoyer une ligne à la BDD.
+	 * @param data
+	 * @return La requête pour l'insertion de la donnée dans la table
+	 */
 	private String requete_creer(DataFull data) {
 		String requete ="INSERT IGNORE INTO `adsb` (`icao24`, `callsign`, `origin_country`, `time_position`, `last_contact`, `longitude`, `latitude`, `geo_altitude`, "
 				+ "`on_ground`, `velocity`, `heading`, `vertical_rate`, `baro_altitude`, `squawk`, `spi`, `position_source`) VALUES "
@@ -265,6 +201,13 @@ public class DataDAOimpl extends DataDAO  {
 		return requete;
 	}
 
+	/**
+	 * Méthode qui crée la requête pour envoyer plusieurs lignes à la BDD 
+	 * en une fois.
+	 * @param Tamponsql
+	 * @return La requête pour l'insertion de la liste de données 
+	 * dans la table
+	 */
 	private String requete_creer_list(ArrayList<DataFull> Tamponsql) {
 		String requete="INSERT IGNORE INTO `adsb` (`icao24`, `callsign`, `origin_country`, `time_position`, `last_contact`, `longitude`, "
 				+ "`latitude`, `geo_altitude`, `on_ground`, `velocity`, `heading`, `vertical_rate`, `baro_altitude`, `squawk`, `spi`, `position_source`) VALUES ";
